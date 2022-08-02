@@ -1,0 +1,160 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Centros de Coste";
+}
+
+
+<div id="ventana_conf_centro_coste" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="lbl_centro_coste">Editar Centro de Coste</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hidden_id_usuario" />
+                <div id="div_creacion">
+                    <div class="col-md-6 form-group mt-3">
+                        <input class="form-control" id="inp_id" name="login" type="text" style="width: 100%;display:none;" />
+                        <input class="form-control" id="inp_identi" name="login" type="text" style="width: 100%;display:none;" />
+                        <input class="form-control" id="inp_operacion" name="login" type="text" style="width: 100%;display:none;" />
+
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Código:<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="codigo" name="login" type="text" style="width: 100%;" readonly />
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Nombre:<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="nombre" name="login" type="text" style="width: 100%;" readonly />
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        EBITDA:
+                        <select class="form-control" id="sele_ebitda">
+                            <option value="0" selected>NO</option>
+                            <option value="1">SÍ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Clasificación:
+                        <select class="form-control" id="sele_agrupacion_creacion">
+                            <option value="empty" selected disabled>Selecciona una clasificación</option>
+                            <option value="Coste Estructura">Coste Estructura</option>
+                            <option value="Coste Línea">Coste Línea</option>
+                            <option value="Coste Directo Fijo">Coste Directo Fijo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btn_save_centro_coste" class="btn btn-success nivel1 float-right text-white">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_add_centro_coste" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Añadir Centro de Coste</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tabla_add_centro_coste" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Añadir</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="Alerta" />
+<partial name="Cargando" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-light">
+            <strong><i class="fa fa-filter"></i>&nbsp;FILTROS</strong>
+            <div class="toolt left float-right" style="z-index: 900;">
+                <div class="tiptext" style="width: 800px;">
+                    <p>Mediante esta pantalla se podrá indicar qué centros de coste se utilizarán para el cálculo del EBITDA, así como su clasificación en Coste de Estructura, Línea o Directo Fijo.</p>
+                    <p>No se podrá borrar un centro de coste para el cual existen datos de SIE en cualquiera de los años cargados.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-2">
+
+                <div class="row mt-3">
+                    <div class="col-4">
+                        Clasificación:
+                        <select class="form-control" id="sel_filtro_clasificacion">
+                            <option value="" selected></option>
+                            <option value="Coste Estructura">Coste Estructura</option>
+                            <option value="Coste Línea">Coste Línea</option>
+                            <option value="Coste Directo Fijo">Coste Directo Fijo</option>
+                        </select>
+                    </div>
+                    <div class="col-2 mt-4">
+                        <button id="btn_nuevo_centro" class="btn btn-warning nivel1">Nuevo Centro de Coste </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <table class="table table-striped" id="tabla_centros_coste" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>EBITDA</th>
+                    <th>Clasificación</th>
+                    <th>Editar</th>
+                    <th>Borrar</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_conf_centros_coste.init(permiso);
+</script>
+}
+

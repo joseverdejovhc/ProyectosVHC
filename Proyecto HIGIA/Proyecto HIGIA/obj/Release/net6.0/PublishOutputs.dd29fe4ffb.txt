@@ -1,0 +1,16 @@
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Proyecto HIGIA.exe
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Proyecto HIGIA.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Proyecto HIGIA.deps.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Proyecto HIGIA.runtimeconfig.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Proyecto HIGIA.pdb
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\DocumentFormat.OpenXml.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\System.IO.Packaging.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

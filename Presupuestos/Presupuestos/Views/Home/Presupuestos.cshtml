@@ -1,0 +1,270 @@
+﻿@{
+    ViewData["Title"] = "Presupuesto";
+}
+
+<div id="margen_bruto_modal" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Margen Bruto</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tabla_margen_detalle" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Agrupación</th>
+                            <th>Kilos Venta</th>
+                            <th>€ Venta</th>
+                            <th>CDV Total</th>
+                            <th>% Margen Bruto</th>
+                            <th>Margen Bruto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr><th>Total</th><th</th><th></th><th></th><th></th><th></th><th></th></tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="centros_coste_modal" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Coste Estructura y Línea</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tabla_presupuesto" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Centro de Coste</th>
+                            <th>Clasificación</th>
+                            <th>Coste</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr><th></th><th</th></tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cdf_modal" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Coste Directo Fijo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table table-striped" id="tabla_cdf_venta" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>CDF de la venta</th>
+                                <th>Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CDF Cargo Almacén</td>
+                                <td id="td_cdf_cargo_almacen"></td>
+                            </tr>
+                            <tr>
+                                <td>CDF Cargo a Producción</td>
+                                <td id="td_cdf_cargo_produccion"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr><th>Total</th><th id="ft_total_cdf_venta"></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="row mt-4">
+                    <table class="table table-striped" id="tabla_cdf_departamentos" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>CDF Departamentos</th>
+                                <th>Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr><th>Total</th><th></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row mt-4">
+                    <table class="table table-striped bg-secondary text-white" id="tabla_cdf_diferencia" style="width: 100%;">
+                        <tr>
+                            <td>Diferencia</td>
+                            <td id="td_diferencia_cdf"></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ebitda_modal" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>EBITDA</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tabla_ebitda" style="width: 100%;">
+                    <thead class="bg-secondary text-white">                        
+                        <tr><td>Resultado antes de impuesto</td><td id="td_antes_impuesto"></td></tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr><th>EBITDA</th><th></th></tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row m-3">
+    <div class="col-3">
+        <span>Ejercicio</span>
+        <input type="number" id="inp_ejer_presupuesto" class="form-control w-50" min="2021">
+    </div>
+    <div class="col-3 mt-4">
+        <button id="btn_aprobar" class="btn btn-warning nivel1">Aprobar</button>
+        <button id="btn_abrir" class="btn btn-warning nivel1">Abrir</button>
+    </div>
+    <div class="col-3">
+        <span id="sp_ultima_carga"></span>
+    </div>
+    <div class="col-3">
+         <div class="toolt left float-right" style="z-index: 900;">
+            <div class="tiptext" style="width: 800px;">
+                <p>El objetivo de esta pantalla es calcular el resultado previsto de la empresa, para ello se muestran los siguientes apartados:</p>
+                <ul>
+                    <li><u>Margen Bruto</u>: se mostrará el número calculado en la pantalla Margen. <p>Pulsando el botón de detalle se accederá a una pantalla auxiliar que mostrará el Margen por cada una de las agrupaciones que se tienen configuradas en la pantalla de Configuración de Referencias. </p></li>
+                    <li><u>Costes de Estructura y Línea</u>: se muestran los Costes de los departamentos clasificados con esos tipos, los datos proceden de la pantalla SIE – Departamentos. Se excluyen por tanto Inversiones y solo se tomarán los centros de coste con EBITDA SI.</li>
+                    <li><u>Coste Directo Fijo</u>: se muestra la suma de CDF con cargo a Producción más el CDF con cargo a almacén existente en la pantalla de Margen Bruto. En la pantalla de detalle se podrá ver el importe desglosado, así como la comparación con el CDF presupuestado en los centros de coste de ese tipo.</li>
+                    <li><u>Resultado antes de Impuesto</u>: se obtendrá restándole al Margen Bruto, el Coste de Estructura, Línea y Directo Fijo.</li>
+                    <li><u>Resultado después de Impuesto</u>: se obtendrá multiplicando el Resultado antes de Impuesto por 0,75.</li>
+                    <li><u>EBITDA</u>: se calculará como el Resultado antes de impuesto más lo planificado en las cuentas de Amortizaciones, Gastos Financieros e Ingresos Financieros. Dichas cuentas se configurarán en el punto de menú de Configuración de Cuentas Contables.</li>                 
+                </ul>
+                <p>Pulsando el botón de Detalle se podrá ver el importe planificado en cada apartado.</p>
+                <p>Una vez comprobado que los datos son correctos, se pulsará el botón Cerrar Presupuesto, tras lo cual no se podrán hacer cargas de ningún tipo.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="Alerta" />
+<partial name="Cargando" />
+
+<div class="row mt-5">
+    <table class="table table-striped" id="tabla_presupuesto" style="width: 100%;">
+        <thead class="bg-secondary text-white">
+            <tr>
+                <th>Concepto</th>
+                <th style="text-align:right;">Importe</th>
+                <th>Detalle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Margen Bruto</td>
+                <td id="td_margen_bruto" style="text-align:right;"></td>
+                <td><a href="#" class="btn_accesos btn btn-light btn-sm" onclick="modulo_presupuestos.detallesMargenBruto(); "><i class="fa fa-eye"></i></a></td>
+            </tr>
+            <tr>
+                <td>Coste Estructura</td>
+                <td id="td_coste_estructura" style="text-align:right;"></td>
+                <td><a href="#" class="btn_accesos btn btn-light btn-sm" onclick="modulo_presupuestos.detallesCosteEstructura(); "><i class="fa fa-eye"></i></a></td>
+            </tr>
+            <tr>
+                <td>Coste Linea</td>
+                <td id="td_coste_linea" style="text-align:right;"></td>
+                <td><a href="#" class="btn_accesos btn btn-light btn-sm" onclick="modulo_presupuestos.detallesCosteEstructura(); "><i class="fa fa-eye"></i></a></td>
+            </tr>
+            <tr>
+                <td>Coste Directo Fijo</td>
+                <td id="td_cdf" style="text-align:right;"></td>
+                <td><a href="#" class="btn_accesos btn btn-light btn-sm" onclick="modulo_presupuestos.detallesCosteDirectoFijo(); "><i class="fa fa-eye"></i></a></td>
+            </tr>
+            <tr>
+                <td><b>Resultado Antes de Impuesto</b></td>
+                <td id="td_res_antes_impuesto" style="text-align:right;font-weight: bold;"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Resultado Después de Impuesto</b></td>
+                <td id="td_res_despues_impuesto" style="text-align:right;font-weight: bold;"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>EBITDA</b></td>
+                <td id="td_EBITDA" style="text-align:right;font-weight: bold;"></td>
+                <td><a href="#" class="btn_accesos btn btn-light btn-sm" onclick="modulo_presupuestos.detalles_ebitda(); "><i class="fa fa-eye"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_presupuestos.init(permiso);
+</script>
+}

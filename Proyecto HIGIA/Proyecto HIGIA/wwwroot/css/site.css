@@ -1,0 +1,81 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+a.enlace-index {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.pastilla-index:hover {
+    border: 1px solid #888;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 0 20px #AAA;
+}
+
+.modal-header {
+    background-color: #cce3ff;
+}
+
+
+.nav-link-tabs.active {
+    color: #020202 !important;
+    background-color: #e1dede !important;
+    font-weight: bold;
+}
+
+.nav-item > .nav-link-tabs.active {
+    border-style: solid;
+}
+
+td.text-right {
+    text-align:right;
+}
+
+th.text-right {
+    text-align: right;
+    padding-right: 10px !important;
+}
+
+.nav-link-tabs {
+    color: black;
+} .nav-item-tabs {
+    background-color: #e1dede !important;
+} td.table-cell {
+    background-color: #e1dede;
+} table-cell-facturado {
+    background-color: #ffdc9c;
+} td.table-cell-facturado {
+    background-color: #ffdc9c;
+}
+
+label.error.fail-alert {
+    color:red;
+    /*border: 2px solid red;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 2px 0 6px 6px;
+    background: #ffe6eb;*/
+}
+
+input.valid.success-alert {
+    border: 2px solid #4CAF50;
+    color: green;
+}

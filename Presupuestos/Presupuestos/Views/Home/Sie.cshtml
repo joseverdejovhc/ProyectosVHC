@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "SIE";
+}
+
+
+
+<div class="card">
+    <div class="card-header bg-light">
+        <strong><i class="fa fa-filter"></i>&nbsp;FILTROS</strong>
+        <div class="toolt left float-right" style="z-index: 900;">
+            <div class="tiptext" style="width: 800px;">
+                <p>Al cargar los datos del SIE el programa tomará los datos de presupuesto existentes en Gerapli en ese momento. Se podrán hacer tantas cargas como se quiera siempre y cuando el presupuesto de empresa no esté aprobado.</p>
+                <p>Los datos del SIE se mostrarán por Centro de Coste y por Cuenta Contable.</p>
+                <p><u>Centros de Coste</u>: para cada uno de ellos se mostrará el coste planificado en el ejercicio correspondiente. Se excluyen inversiones. Solo se mostrarán los centros de costes marcados con Calculo de EBITDA a Si en la pantalla de configuración de los centros de coste.</p>
+                <p><u>Por Cuenta Contable</u>: se mostrarán los datos anteriores por centro de coste y cuenta contable, si bien, en este punto de menú SI se incluirán las Inversiones.</p>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <span>Ejercicio</span>
+                <input type="number" id="inpt_ejercicio" class="form-control filtrar" min="2021" max="2031" step="1" />
+            </div>
+            <div class="col-3 mt-4">
+                <button id="btn_cargar_sie" class="btn btn-warning nivel1">Cargar SIE</button>
+            </div>
+            <div class="col-6">
+                <span id="sp_info_sie"></span>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<partial name="Cargando" />
+
+<partial name="Alerta" />
+<ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="centro_coste-tab" data-bs-toggle="tab" data-bs-target="#centro_coste" type="button" role="tab" aria-controls="home" aria-selected="true">Por Centro de Coste</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="cuenta_contable-tab" data-bs-toggle="tab" data-bs-target="#cuenta_contable" type="button" role="tab" aria-controls="profile" aria-selected="false">Por Cuenta Contable</button>
+    </li>
+
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="centro_coste" role="tabpanel" aria-labelledby="centro_coste-tab">
+        <div class="row mt-3">
+            <div class="col-4">
+                <span>Clasificación</span>
+                <select id="sel_clasificacion" class="form-control filtrar">
+                    <option value="" selected></option>
+                    <option value="Coste Estructura">Coste Estructura</option>
+                    <option value="Coste Línea">Coste Línea</option>
+                    <option value="Coste Directo Fijo">Coste Directo Fijo</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <table class="table table-striped datatable" id="tabla_centro_coste" style="width: 100%;">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th>Código</th>
+                        <th>Centro de Coste</th>
+                        <th>Clasificación Centro Coste</th>
+                        <th>Gasto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+    <div class="tab-pane fade" id="cuenta_contable" role="tabpanel" aria-labelledby="cuenta_contable-tab">
+        <div class="row mt-3">
+            <table class="table table-striped datatable" id="tabla_cuenta_contable" style="width: 100%;">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th>Código</th>
+                        <th>Centro de Coste</th>
+                        <th>Código Cuenta</th>
+                        <th>Cuenta</th>
+                        <th>Presupuesto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><th></th><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_sie.init(permiso);
+</script>
+}

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Proyecto HIGIA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Proyecto_HIGIA.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.min.css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap4.min.css">
+    <!-- DataTables Buttons -->
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/Buttons-1.6.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/ColReorder-1.5.2/css/colReorder.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/FixedHeader-3.1.7/css/fixedHeader.bootstrap4.min.css">
+
+    <script src="~/lib/sweetalert/sweetalert2.js"></script>
+    <link rel="stylesheet" href="~/lib/sweetalert/sweetalert.min.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
+            <div class="col-sm-4">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="~/img/logo.png" alt="Logo" class="img-fluid" /></a>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>@ViewData["Title"].ToString().ToUpper()</h3>
+            </div>
+
+            <div class="col-sm-4 text-left">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="font-size: 18px;">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" title="Inicio" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-home"></i>
+                                <span class="d-block d-sm-none d-md-none">Inicio</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Presupuestos" title="Presupuesto" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-coins"></i>
+                                <span class="d-block d-sm-none d-md-none">Presupuesto</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Pedidos" title="Contratos/Pedidos" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-file-contract"></i>
+                                <span class="d-block d-sm-none d-md-none">Contratos/Pedidos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Facturas" title="Facturas" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-file-invoice"></i>
+                                <span class="d-block d-sm-none d-md-none">Facturas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SeguimientoPresupuesto" title="Seguimiento de Presupuesto" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-eye"></i>
+                                <span class="d-block d-sm-none d-md-none">Seguimiento de Presupuesto</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Usuarios" title="Usuarios" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-user"></i>
+                                <span class="d-block d-sm-none d-md-none">Usuarios</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+           
+        </nav>
+    </header>
+    <div class="container" style="margin-top:120px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted fixed-bottom">
+        <div class="container">
+            &copy; 2022 - Proyecto_HIGIA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/fontawesome/js/all.js"></script>
+    <script src="~/lib/fontawesome/js/fontawesome.min.js"></script>
+    <script src="~/lib/flatpickr/flatpickr.js"></script>
+    <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+
+    <!-- DataTables -->
+    <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap4.min.js"></script>
+      <!-- DataTables Buttons -->
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/dataTables.buttons.js"></script>
+    <script src="~/lib/datatables.net/extensions/jszip.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/pdfmake.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/vfs_fonts.js"></script>
+    <script src="~/lib/datatables.net/extensions/ColReorder-1.5.2/js/dataTables.colReorder.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/FixedHeader-3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/FixedHeader-3.1.7/js/fixedHeader.bootstrap4.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/helper.js"></script>
+
+    <script src="~/js/modules/modulo_presupuesto.js"></script>
+    <script src="~/js/modules/modulo_pedidos.js"></script>
+    <script src="~/js/modules/modulo_factura.js"></script>
+
+    <script src="~/js/modules/modulo_facturas.js"></script>
+    <script src="~/js/modules/modulo_nuevo_pedido.js"></script>
+    <script src="~/js/modules/modulo_seguimiento.js"></script>
+    <script src="~/js/modules/modulo_usuarios.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts1", required: false)
+
+</body>
+</html>

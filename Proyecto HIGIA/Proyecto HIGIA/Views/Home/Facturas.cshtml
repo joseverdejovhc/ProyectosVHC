@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Facturas";
+}
+<partial name="Alerta" />
+
+<div class="row">
+    <table class="table table-striped datatable" id="tabla_facturas" style="width: 100%;">
+        <thead class="bg-secondary text-white">
+            <tr>
+                <th>NºFactura</th>
+                <th>NºExpediente</th>
+                <th>Fecha</th>
+                <th>NºPedido</th>
+                <th>Proveedor</th>
+                <th>Importe</th>
+                <th>Ir</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr><th colspan="5" style="text-align:center;">Total</th><th class="text-right"></th></tr>
+        </tfoot>
+    </table>
+</div>
+<partial name="NuevaFactura" />
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    modulo_factura.init();
+    modulo_facturas.init();
+</script>
+}

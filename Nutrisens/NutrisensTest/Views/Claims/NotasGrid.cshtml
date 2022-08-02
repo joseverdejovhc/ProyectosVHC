@@ -1,0 +1,64 @@
+﻿@using System.Data
+
+@model DataTable
+
+@{
+    string nivel = ViewData["nivel"].ToString();
+}
+
+
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped" id="grid_notas">
+        <thead class="text-white bg-secondary">
+            <tr>
+                <th class="ordenado_por_defecto">
+                    Date
+                </th>
+                <th >
+                    User
+                </th>
+                <th>
+                    Note
+                </th>
+                @{
+                    if (nivel == "1")
+                    {
+                        <th class="ocultar-d"></th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td class="Fecha">
+                        @row["Fecha"]
+                        <input type="hidden" class="id_nota" value='@row["IdNota"]' />
+                    </td>
+                    <td class="NombreCompleto">
+                        @row["NombreCompleto"]
+                    </td>
+                    <td class="Nota">
+                        @row["Nota"]
+                    </td>
+
+                    @{
+                        if (nivel == "1")
+                        {
+                            <td class="ocultar-d text-end" style="font-size: 14px;">
+                                <button type="button" class="btn btn-light btn-sm nivel1 btn_eliminar_nota ocultar-d" title="Delete Note"><i class="fa fa-trash text-dark"></i></button>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+}

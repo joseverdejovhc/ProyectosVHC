@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Presupuestos</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Presupuestos.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.5.95/css/materialdesignicons.min.css" integrity="sha512-Zw6ER2h5+Zjtrej6afEKgS8G5kehmDAHYp9M2xf38MPmpUWX39VrYmdGtCrDQbdLQrTnBVT8/gcNhgS4XPgvEg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/select2/select2.min.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/lib/datatables.net-bs/css/jquery.dataTables.css">
+
+    <!-- DataTables Buttons -->
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/Buttons-1.6.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/ColReorder-1.5.2/css/colReorder.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/datatables.net/extensions/FixedHeader-3.1.7/css/fixedHeader.bootstrap4.min.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
+            <div class="col-sm-4">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="~/img/logo.png" alt="Logo" class="img-fluid" /></a>
+            </div>
+
+            <div class="col-sm-4 text-left">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="font-size: 18px;">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" title="Inicio" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-home"></i>
+                                <span class="d-block d-sm-none d-md-none">Inicio</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MargenBruto" title="Margen Bruto" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-coins"></i>
+                                <span class="d-block d-sm-none d-md-none">Margen Bruto</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SIE" title="SIE">
+                                <i class="fa fa-file-invoice-dollar"></i>
+                                <span class="d-block d-sm-none d-md-none">SIE</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Presupuestos" title="Presupuesto" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-clipboard-list"></i>
+                                <span class="d-block d-sm-none d-md-none">Presupuesto</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionCentroCoste" title="Configuración Centros de Coste" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-building"></i>
+                                <span class="d-block d-sm-none d-md-none">Configuración Centros de Coste</span>
+                            </a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionCuentasContables" title="Configuración Cuentas Contables" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-money-bill"></i>
+                                <span class="d-block d-sm-none d-md-none">Configuración Cuentas Contables</span>
+                            </a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionReferencias" title="Configuración Referencias" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-cogs"></i>
+                                <span class="d-block d-sm-none d-md-none">Configuración Referencias</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Usuarios" title="Usuarios" OnClick="helper.stop_all_ajax()">
+                                <i class="fa fa-user"></i>
+                                <span class="d-block d-sm-none d-md-none">Usuarios</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h4 class="col-sm-4 text-right">@ViewData["Title"].ToString().ToUpper()</h4>
+        </nav>
+    </header>
+    <div class="container" style="margin-top:120px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Presupuestos - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/fontawesome/js/all.js"></script>
+    <script src="~/lib/fontawesome/js/fontawesome.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap4.min.js"></script>
+    <!-- DataTables Sorting Date EU -->
+    <script src="~/lib/datatables.net/extensions/Sorting/date-eu.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/dataTables.buttons.js"></script>
+    <script src="~/lib/datatables.net/extensions/jszip.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/pdfmake.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/Buttons-1.6.2/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/vfs_fonts.js"></script>
+    <script src="~/lib/datatables.net/extensions/ColReorder-1.5.2/js/dataTables.colReorder.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/FixedHeader-3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/lib/datatables.net/extensions/FixedHeader-3.1.7/js/fixedHeader.bootstrap4.min.js"></script>
+    <!-- /DataTables Buttons -->
+    <script src="~/lib/select2/select2.min.js"></script>
+    <script src="~/lib/dataTables.rowGroup.min.js"></script>
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/dataTables.cellEdit.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/helper.js" asp-append-version="true"></script>
+    <script src="~/js/modules/modulo_usuarios.js"></script>
+    <script src="~/js/modules/modulo_conf_referencias.js"></script>
+    <script src="~/js/modules/modulo_margen_bruto.js"></script>
+    <script src="~/js/modules/modulo_conf_centros_coste.js"></script>
+    <script src="~/js/modules/modulo_conf_cuentas_contables.js"></script>
+    <script src="~/js/modules/modulo_sie.js"></script>
+    <script src="~/js/modules/modulo_presupuestos.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts1", required: false)
+
+</body>
+</html>

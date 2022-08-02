@@ -1,0 +1,38 @@
+﻿@model List<Nutrisens.Models.Seccion>
+
+@{
+    int num_registros = Model.Count;
+
+    int i = 1;
+}
+
+<input type="hidden" id="hidden_num_secciones" value="@num_registros" />
+
+@foreach (var item in Model)
+{
+    string selected0 = "", selected1 = "", selected2 = "";
+
+    switch (item.Nivel)
+    {
+        case 0:
+            selected0 = "selected";
+            break;
+        case 1:
+            selected1 = "selected";
+            break;
+        case 2:
+            selected2 = "selected";
+            break;
+    // El signo de admiración de abajo es para que no considere el tag option como propio de .NET, porque si no da error al insertar código Razor con arroba @
+    }
+
+    <div class="col-4">
+        <label class="form-label">@item.NombreSeccion</label>
+        <select id="desp_seccion_@i" class="form-select" title="@item.Id">
+            <!option value="0" @selected0></!option>
+            <!option value="1" @selected1>Read/Write</!option>
+            <!option value="2" @selected2>Read only</!option>
+        </select>
+    </div>
+    i++;
+}

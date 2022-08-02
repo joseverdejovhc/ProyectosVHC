@@ -1,0 +1,29 @@
+﻿
+
+@model IEnumerable<Nutrisens.Models.Cliente>
+
+    <table class="table table-condensed table-hover datatable_clientes" id="tabla_clientes" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>
+                    CODE
+                </th>
+                <th>
+                    NAME
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="seleccionar seleccionar_cliente">
+                    <td class="codigo_cliente">
+                        @Html.DisplayFor(modelItem => item.CodigoCliente)
+                    </td>
+                    <td class="nombre_cliente" >
+                        @Html.DisplayFor(modelItem => item.NombreCliente)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

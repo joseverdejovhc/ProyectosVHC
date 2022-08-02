@@ -1,0 +1,309 @@
+﻿@{
+    ViewData["Title"] = "Margen Bruto";
+}
+<partial name="Cargando" />
+
+
+<div id="ventana_calculo_cdf" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Cálculo CDF Unitario</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <span>Ejercicio</span>
+                        <input type="number" id="inpt_ejercicio_cdf" class="form-control" min="2021" max="2031" step="1" />
+                    </div>
+                    <div class="col-3 mt-4">
+                        <button id="btn_aprobar_cdf" class="btn btn-warning nivel1">Aprobar CDF</button>
+                    </div>
+                    <div class="col-3">
+                        <span id="span_error" class="text-danger"></span>
+                    </div>
+                    <div class="col-3">
+                        <div class="toolt left float-right" style="z-index: 900;">
+                            <div class="tiptext" style="width: 800px;">
+                                <p>El objetivo de esta pantalla es calcular el CDF por Unidad de Stock de cada una de las referencias incluidas en la pantalla Margen Bruto. Para ello será necesario que previamente se hayan hecho las cargas del Presupuesto de Producción / Ventas y SIE.</p>
+                                <p>En la parte superior de la pantalla se muestra el Gasto previsto, excluyendo inversiones, de todos aquellos departamentos que en el punto de menú de Configuración de Departamentos hayan sido clasificados como de Coste Directo Fijo y Cálculo de EBITDA SI. En la parte inferior de la pantalla se muestra la previsión de producción en unidad de stock agrupada por planta de producción.</p>
+                                <p>Para hacer el cálculo del CDF por Ud de Stock de cada referencia, bastará con indicar un % del coste directo fijo que debe absorber cada planta de producción. El sumatorio de los porcentajes introducidos deberá sumar 100.</p>
+                                <p>El CDF que debe de absorber cada planta será igual al % CDF de la misma por el Total de Coste Directo Fijo.</p>
+                                <p>El CDF por Ud de Stock se obtendrá dividiendo el CDF absorbido por cada planta, entre su previsión de producción.</p>
+                                <p>Para que los CDF por Unidad de Stock tengan efecto en la pantalla de Margen Bruto será necesario pulsar el botón Aprobar CDF. El cálculo CDF se podrá cambiar siempre y cuando el presupuesto de empresa no haya sido modificado.</p>
+                                <p>Dado que el cálculo del CDF variará si se modifica el presupuesto de producción o el de SIE, si se hace alguna de esas cargas, se borrarán todos los porcentajes de CDF introducidos debiendo hacer nuevamente el cálculo. De esta circunstancia se avisará en la pantalla Margen Bruto.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-3">
+                    <table class="table table-striped" id="tabla_departamento" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>Código</th>
+                                <th>Departamento Coste Directo Fijo</th>
+                                <th>Gasto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr><th></th><th></th><th></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="row m-3">
+                    <table class="table table-striped" id="tabla_cdf_agrupacion" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>Planta</th>
+                                <th>%CDF</th>
+                                <th>CDF Absorbido</th>
+                                <th>Previsión Producción Ud Stock</th>
+                                <th>CDF por Ud Stock</th>
+                                <th>Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr><th>Total</th><th id="porcen_cdf"></th><th id="total_gasto"></th><th id="kilos_produccion"></th><th></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_porcentaje_cdf" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color:#9f9f9f;">
+            <div class="modal-header">
+                <h5>Calcular CDF por KG</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="number" class="form-control" id="row_datatable" hidden>
+
+                <div class="form-group col-md-12">
+                    <label for="agregar_nombre" class="control-label col-sm-4">Planta</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="planta_modal" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="agregar_nombre" class="control-label col-sm-4">%CDF</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="porcentaje_cdf" step=".01">
+                    </div>
+                </div>
+                <div class="form-group col-md-12" style="display:none;">
+                    <label for="agregar_nombre" class="control-label col-sm-4">Gasto Repartir</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="gasto_repartir" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-12" style="display:none;">
+                    <label for="agregar_nombre" class="control-label col-sm-4">Previsión Producción Kilos</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="prevision_produccion" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-md-12" style="display:none;">
+                    <label for="agregar_nombre" class="control-label col-sm-4">CDF por KG</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="cdf_kilo" readonly>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white nivel1" data-bs-dismiss="modal">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light">
+        <strong><i class="fa fa-filter"></i>&nbsp;FILTROS</strong>
+        <div class="toolt left float-right" style="z-index: 900;">
+            <div class="tiptext" style="width: 800px;">
+                <p>Al pulsar el botón Cargar Presupuesto Ventas / Producción el programa cargará los datos del presupuesto de ventas y producción del ejercicio seleccionado. Para poder hacer la carga será necesario que ambos presupuestos estén aprobados.</p>
+                <p>Se podrán hacer tantas cargas como se quiera siempre y cuando el presupuesto de la empresa esté abierto, en caso de estar cerrado el botón Cargar Presupuesto no saldrá.</p>
+                <p>Realizada la carga, se mostrarán en pantalla todas aquellas referencias que estén incluidas bien en el presupuesto de ventas bien en el de producción, los datos que se mostrarán serán los siguientes:</p>
+                <ul>
+                    <li>Codire</li>
+                    <li>Código Alternativo</li>
+                    <li>Referencia</li>
+                    <li>Tipo de Referencia: PT- Producto Terminado, C – Comercializado, MP – Materia Prima </li>
+                    <li>Código Planta y Línea, solo se mostrará para los PT y se obtendrá de la configuración existente en el PMP.</li>
+                    <li>Agrupación: para cada referencia se mostrará la configuración indicada en el punto de menú Configuración de Referencias.</li>
+                    <li>Unidad de Stock</li>
+                    <li>-----</li>
+                    <li>Kilos Ventas y € Ventas: saldrán del presupuesto de ventas del ejercicio correspondiente</li>
+                    <li>PMV por KG: su valor se obtendrá dividiendo € Ventas entre Kilos de Venta </li>
+                    <li>-----</li>
+                    <li>Stock Prev Inicio: saldrá el stock previsto a inicio de ejercicio cargado en el presupuesto de producción / comercializados</li>
+                    <li>CDV y CDF Almacén: ambos datos se cogerán de la versión de Seguimiento existente en la pantalla Coste Total de Referencias del ejercicio anterior al que se está cargando.</li>
+                    <li>Kilos cargo almacén: si Kilos Venta es mayor o igual que Stock Fin de Ejercicio, su valor será Stock Previsto Inicio Ejercicio, si es menor, su valor será Kilos Venta. </li>
+                    <li>CDV Cargo Almacén: Kilos Cargo almacén * CDV Almacén </li>
+                    <li>CDF Cargo Almacén: Kilos cargo almacén * CDF Almacén</li>
+                    <li>-----</li>
+                    <li>Kilos cargo Producción: Diferencia entre Kilos Ventas y Kilos Cargo Almacén</li>
+                    <li>Kilos Producción: previsión de producción / compra existente en el presupuesto de producción / comercializados del ejercicio correspondiente. </li>
+                    <li>CDV: previsión de CDV o Coste de Compra del presupuesto de producción / comercializados del ejercicio correspondiente</li>
+                    <li>CDF: se calculará en base a lo indicado en la pantalla Calculo Coste Directo Fijo.</li>
+                    <li>CDV Cargo Producción: Kilos cargo Producción * CDV </li>
+                    <li>CDF Cargo Producción: Kilos cargo Producción * CDF. Nota: dado que estamos cogiendo únicamente los kilos con cargo a producción, la suma de este campo no será igual a la suma del SIE de los centros de costes clasificados como de CDF.</li>
+                    <li>-----</li>
+                    <li>CDV Total: CDV Cargo Almacén + CDV Cargo Producción </li>
+                    <li>CDV Unitario: CDV Total / Kilos Venta </li>
+                    <li>CDF Unitario: CDF Total / Kilos Venta </li>
+                    <li>Margen Bruto: Euros Venta – CDV Total</li>
+                    <li>% Margen: Margen Bruto / Euros Venta *100 </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <span>Ejercicio</span>
+                <input type="number" id="inpt_ejercicio" class="form-control filtrar" min="2021" max="2031" step="1" />
+            </div>
+            <div class="col-3">
+                <button id="btn_cargar_presupuesto" class="btn btn-warning nivel1">Cargar Presupuesto Ventas / Producción</button>
+            </div>
+            <div class="col-3">
+                <span id="sp_ultima_carga"></span>
+            </div>
+            <div class="col-3">
+                <button id="btn_cdf_unitario" class="btn btn-warning">Calcular CDF Unitario</button>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-3">
+                <span>Planta</span>
+                <select id="sel_planta" class="form-control filtrar">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-3">
+                <span>Línea</span>
+                <select id="sel_linea" class="form-control filtrar">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-3">
+                <span>Tipo Referencia</span>
+                <select id="sel_referencia" class="form-control filtrar">
+                    <option value="" selected></option>
+                    <option value="PT">Producto Terminado</option>
+                    <option value="C">Comercializado</option>
+                    <option value="MP">Materia Prima</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <span>Agrupación</span>
+                <select class="form-control filtrar" id="sel_agrupacion">
+                    <option value="" selected></option>
+                    <option value="1">Nutricion Medica</option>
+                    <option value="2">Preparados Polvo</option>
+                    <option value="3">Transporte</option>
+                    <option value="4">UHT Botella</option>
+                    <option value="5">UHT Brik</option>
+                    <option value="6">MULTISABOR</option>
+                    <option value="7">Comercializados</option>
+                    <option value="8">Ingrediente Activo</option>
+                    <option value="9">Exclusivo</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<partial name="Alerta" />
+
+<div class="row mt-3" style="position: absolute; left: 0; margin: 20px;">
+    <div class="col-2 mb-3">
+        <input type="text" id="myCustomSearchBox" class="form-control" placeholder="Buscar" style="width:50%;">
+    </div>
+    <div class="col-3 mb-3">
+        <span id="lb_error_margen" class="text-danger"></span>
+    </div>
+    <div class="col-3 mb-3">
+        <span id="lb_cdf_unitario" class="text-danger"></span>
+    </div>
+    <table class="table datatable" id="tabla_margen_bruto" style="width: 100%;">
+        <thead class="thead-light">
+            <tr>
+                <th>Codire</th>
+                <th>Código</th>
+                <th>Referencia</th>
+                <th>Tipo de referencia</th>
+                <th>Código Planta</th>
+                <th>Código de Línea</th>
+                <th>Agrupación</th>
+                <th style="background-color:rgb(202,236,255);">Unidad de stock</th>
+                <th style="background-color:rgb(202,236,255);">Kilos Ventas</th>
+                <th style="background-color:rgb(202,236,255);">Euros Ventas</th>
+                <th style="background-color:rgb(202,236,255);">PMV/KG</th>
+                <th style="background-color:rgb(255,213,182);">Stock Prev Inicio</th>
+                <th style="background-color:rgb(255,213,182);">CDV Almacén</th>
+                <th style="background-color:rgb(255,213,182);">CDF Almacén</th>
+                <th style="background-color:rgb(255,213,182);">Kilos Cargo Almacén</th>
+                <th style="background-color:rgb(255,213,182);">CDV Cargo Almacén</th>
+                <th style="background-color:rgb(255,213,182);">CDF Cargo Almacén</th>
+                <th style="background-color:rgb(247,244,193);">Kilos Cargo Producción</th>
+                <th style="background-color:rgb(247,244,193);">Kilos Producción / Compra</th>
+                <th style="background-color:rgb(247,244,193);">CDV</th>
+                <th style="background-color:rgb(247,244,193);">CDF</th>
+                <th style="background-color:rgb(247,244,193);">CDV Cargo Producción</th>
+                <th style="background-color:rgb(247,244,193);">CDF Cargo Producción</th>
+                <th style="background-color:#cdcdcd;">CDV Total</th>
+                <th style="background-color:#cdcdcd;">CDV Unitario</th>
+                <th style="background-color:#cdcdcd;">CDF Total</th>
+                <th style="background-color:#cdcdcd;">CDF Unitario</th>
+                <th style="background-color:#cdcdcd;">Margen Bruto</th>
+                <th style="background-color:#cdcdcd;">% Margen</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_margen_bruto.init(permiso);
+</script>
+}

@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Claims";
+}
+
+<partial name="Cargando" />
+
+
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="Claims" asp-action="Claims">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-bullhorn text-warning"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Claims</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="Claims" asp-action="ExternalActions">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-square-up-right text-warning"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">External Actions</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="Claims" asp-action="InternalActions">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-retweet text-warning"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Internal Actions</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="Claims" asp-action="Uploads">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-cloud-arrow-up text-warning"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Data Uploads</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+
+</div>
+
+@section Scripts {
+
+<script type="text/javascript">
+    $(document).on('click', '.enlace-index', function (e) {
+        e.preventDefault();
+        // Mostramos el Ajax Loader
+        $("#AjaxLoader").show();
+
+        window.location.href = this.href;
+    });
+</script>
+}

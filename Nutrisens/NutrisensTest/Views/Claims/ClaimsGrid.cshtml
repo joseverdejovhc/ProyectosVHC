@@ -1,0 +1,67 @@
+﻿@using System.Data
+@model DataTable
+
+
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped datatable_claims" id="grid_claims">
+        <thead class="bg-secondary text-white">
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Customer
+                </th>
+                <th class="ordenado_por_defecto">
+                    Date
+                </th>
+                <th>
+                    Claim Status
+                </th>
+                <th>
+                    EA Status
+                </th>
+                <th>
+                    IA Status
+                </th>
+                <th class="sin_orden ocultar-d"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td class="Codigo">
+                        @row["Codigo"]
+                    </td>
+                    <td class="NombreCliente">
+                        @row["NombreCliente"]
+                    </td>
+                    <td class="FechaAltaCorta">
+                        @row["FechaAltaCorta"]
+                    </td>
+                    <td class="EstadoNombre">
+                        @row["EstadoNombre"]
+                    </td>
+                    <td class="EstadoAE">
+                        @row["EstadoAE"]
+                    </td>
+                    <td class="EstadoAI">
+                        @row["EstadoAI"]
+                    </td>
+                    <td class="ocultar-d text-end" style="font-size: 14px;">
+                        <a asp-controller="Claims" asp-action="ClaimsDetail" asp-route-codigo='@row["Codigo"]' target="_blank" title="View Claim">
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+}

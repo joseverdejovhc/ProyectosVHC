@@ -1,0 +1,185 @@
+﻿@{
+    ViewData["Title"] = "Configuración Cuentas Contables";
+}
+
+
+<div id="ventana_add_cuenta" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Añadir Cuenta</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="inp_clasificacion" name="login" type="text" style="width: 100%;display:none;"  />
+                <table class="table table-striped" id="tabla_add_cuenta" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Nombre</th>
+                            <th>Añadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">                
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="Alerta" />
+<partial name="Cargando" />
+
+<div class="row mb-2">
+    <div class="col-7">
+        <h5>Amortizaciones y subvenciones</h5>
+    </div>
+
+    <div class="col-3">
+        <button id="btn_nuevo_amortizacion" class="btn nivel1 btn-warning btn_add_cuenta" data-category="Amortizaciones y subvenciones">Nueva</button>
+    </div>
+
+    <div class="col-2">
+        <div class="toolt left float-right" style="z-index: 900;">
+            <div class="tiptext" style="width: 800px;">
+                <p>El objetivo de esta pantalla es configurar las cuentas contables correspondientes a las Amortizaciones, Gastos Financieros e Ingresos Financieros.</p>               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card mb-5">
+    <div class="card-body">
+        <div class="mb-2">
+            <div class="row">
+                <table class="table table-striped" id="tabla_amortizaciones_subvenciones" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-7">
+        <h5>Gastos Financieros</h5>
+    </div>
+
+    <div class="col-5">
+        <button id="btn_nuevo_gasto_financiero" class="btn btn-warning nivel1 btn_add_cuenta" data-category="Gastos Financieros">Nueva</button>
+    </div>
+</div>
+
+<div class="card mb-5">
+    <div class="card-body">
+        <div class="mb-2">
+            <div class="row">
+                <table class="table table-striped" id="tabla_gastos_financieros" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-2">
+
+    <div class="col-7">
+        <h5>Ingresos Financieros</h5>
+    </div>
+
+    <div class="col-5">
+        <button id="btn_nuevo_ingreso_financiero" class="btn nivel1 btn-warning btn_add_cuenta" data-category="Ingresos Financieros">Nueva</button>
+    </div>
+</div>
+
+<div class="card mb-5">
+
+    <div class="card-body">
+        <div class="mb-2">
+            <div class="row">
+                <table class="table table-striped" id="tabla_ingresos_financieros" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*
+    <div class="row mb-2">    
+        <div class="col-7">
+            <h5>Inversión(No Gasto)</h5>
+        </div>
+
+        <div class="col-5">
+            <button id="btn_nuevo_inversion" class="btn btn-warning">Nueva</button>
+        </div>    
+    </div>
+
+    <div class="card mb-5">
+
+        <div class="card-body">
+            <div class="mb-2">
+                <div class="row">
+                    <table class="table table-striped" id="tabla_ingresos_financieros" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>Número</th>
+                                <th>Nombre</th>
+                                <th>Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+*@
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_conf_cuentas_contables.init(permiso);
+</script>
+}
+

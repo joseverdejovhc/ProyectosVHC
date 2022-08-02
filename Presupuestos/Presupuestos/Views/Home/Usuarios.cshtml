@@ -1,0 +1,156 @@
+﻿@model Presupuestos.Models.Usuario
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div id="ventana_accesos" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Accesos del usuario <label id="lbl_nombre_usuario"></label></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               <input type="hidden" id="hidden_id_usuario" />
+                <div id="div_niveles_usuario">
+                    <form id="formNiveles" asp-antiforgery="false">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="small">Margen Bruto</label>
+                                <select id="margen_bruto" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="small">Configuración Centros de Coste</label>
+                                <select id="conf_centros_coste" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="small">Usuarios</label>
+                                <select id="usuarios" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                <label class="small">SIE</label>
+                                <select id="sie" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="small">Configuración Cuentas Contables</label>
+                                <select id="conf_cuenta_contable" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="small">Presupuesto</label>
+                                <select id="presupuesto" class="form-control form-control-sm secciones">
+                                   <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                <label class="small">Configuración Referencias</label>
+                                <select id="conf_referencia" class="form-control form-control-sm secciones">
+                                    <option selected value="0">Sin acceso</option>
+                                    <option value="2">Sólo Lectura</option>
+                                    <option value="1">Lectura y Escritura</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div><br />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success float-right text-white" onclick="modulo_usuarios.save_secciones();">
+                    Guardar secciones
+                </button>
+                <button type="button" class="btn btn-warning float-left text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="m-5">
+    <div class="container">
+        <div class="card mb-5">
+            <div class="card-header alert-success">
+                <strong>Añadir Usuario</strong>
+            </div>
+            <form id="AjaxFormUsuarios" asp-antiforgery="false">
+
+                <div class="card-body form-inline">
+                    <div class="col-md-4">
+                        Login Windows<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="login" name="login" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el login')"
+                               oninput="this.setCustomValidity('')" maxlength="30" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-5">
+                        Nombre<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="nombre" name="nombre" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el nombre')"
+                               oninput="this.setCustomValidity('')" maxlength="100" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-3">
+                        <br />
+                        <button class="btn btn-success nivel1" type="submit" id="btn_guardar_usuario" data-request-url="@Url.Action("GuardarUsuario", "Home")"><i class="fa fa-save"></i>&nbsp;AÑADIR</button>
+                        <partial name="Alerta" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <form id="formListaUsuarios" asp-antiforgery="false">
+
+            <table class="table datatable_usuarios" id="tabla_usuarios" style="width: 100%;">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="display: none">
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.login).ToUpper()
+                        </th>
+                        <th data-toggle="tooltip" data-placement="top" data-html="false" title="Para editar el nombre de usuario haga doble click sobre él">
+                            @Html.DisplayNameFor(model => model.nombre).ToUpper()
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+</div>
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_usuarios.init(permiso);
+</script>
+}
+

@@ -1,0 +1,99 @@
+﻿
+
+<div id="ventana_add_factura" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Factura</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form_factura" autocomplete="off">
+                    <div class="row mt-3 mb-3">
+                        <div class="col-4">
+                            <input type="text" class="form-control" id="identi_factura" style="display:none;">
+                            <input type="text" class="form-control" id="identi_pedido" style="display:none;">
+                            <input type="text" class="form-control" id="modulo" style="display:none;">
+
+                            <span>Nº Factura</span>
+                            <input type="text" id="num_factura" name="num_factura" class="form-control" />
+                        </div>
+                        <div class="col-4">
+                            <span>Nº Expediente</span>
+                            <input type="text" id="num_expediente" name="num_expediente" class="form-control" />
+                        </div>
+                        <div class="col-4">
+                            <span>Fecha Factura</span>
+                            <input type="text" id="fech_factura" name="fech_factura" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-striped" id="tabla_factura_subcapitulo" style="width: 100%;">
+                            <thead class="bg-secondary text-white">
+                                <tr>
+                                    <th>Código Capitulo</th>
+                                    <th>Capítulo</th>
+                                    <th>Código Subcapítulo</th>
+                                    <th>Subcapitulo</th>
+                                    <th>Importe</th>
+                                    <th>Modificar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr><th colspan="4" style="text-align:center;">Total</th><th class="text-right"></th><th class="text-right"></th></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btn_save_factura" class="btn btn-success mr-auto text-white">
+                    Guardar
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_facturado_subcapitulo" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Modificar Facturado Subcapitulo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="id_subcapitulo_facturado" style="display:none;">
+                    <input type="text" class="form-control" id="row_facturado" style="display:none;">
+                    <input type="text" class="form-control" id="action_factura" style="display:none;">
+
+                    <label for="importe">Introduce Importe Facturado</label>
+                    <input type="number" class="form-control" id="importe_facturado" placeholder="Introduce importe facturado">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btn-save-subcapitulo_facturado" class="btn btn-success float-left text-white">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

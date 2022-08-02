@@ -1,0 +1,79 @@
+﻿@using System.Data
+
+@model DataTable
+
+@{
+    string nivel = ViewData["nivel"].ToString();
+    string perfil = ViewData["perfil"].ToString();
+}
+
+
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped datatable_AI" id="grid_AI">
+        <thead class="text-white bg-secondary">
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Person in charge
+                </th>
+                <th>
+                    Deadline
+                </th>
+                <th>
+                    Closing date
+                </th>
+                <th class="ocultar-d"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td class="CodigoAI">
+                        @row["CodigoAI"]
+                    </td>
+                    <td class="NombreEstado">
+                        @row["NombreEstado"]
+                    </td>
+                    <td class="NombreResponsable">
+                        @row["NombreResponsable"]
+                    </td>
+                    <td class="FechaLimite">
+                        @{
+                            if (DateTime.TryParse(row["FechaLimite"].ToString(), out DateTime fecha_limite))
+                            {
+                                <span>@fecha_limite.ToString("dd-MM-yyyy")</span>
+                            }
+                        }
+                    </td>
+                    <td class="FechaCierre">
+                        @{
+                            if (DateTime.TryParse(row["FechaCierre"].ToString(), out DateTime fecha_cierre))
+                            {
+                                <span>@fecha_cierre.ToString("dd-MM-yyyy")</span>
+                            }
+                        }
+                    </td>
+                    <td class="ocultar-d text-end" style="font-size: 14px;">
+                        <button type="button" class="btn btn-light btn-sm nivel1 btn_editar_AI ocultar-d" title="Edit"><i class="fa fa-edit text-dark"></i></button>
+                        @if ((perfil == "1" || perfil == "2" || perfil == "3") && row["EstadoAI"].ToString() != "2")
+                        {
+                            <button type="button" class="btn btn-light btn-sm nivel1 btn_eliminar_AI ocultar-d" title="Delete"><i class="fa fa-trash text-dark"></i></button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+}

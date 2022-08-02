@@ -1,0 +1,42 @@
+﻿@using System.Data
+
+@model DataTable
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped datatable_cargas" id="grid_cargas">
+        <thead>
+            <tr>
+                <th class="bg-secondary text-white">Company</th>
+                <th class="bg-secondary text-white">Data Load Type</th>
+                <th class="bg-secondary text-white">User</th>
+                <th class="bg-secondary text-white">Date</th>
+                <th class="bg-secondary text-white ocultar-d"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td>@row["nombre_empresa"]</td>
+                    <td>@row["tipo"]</td>
+                    <td>@row["NombreCompleto"]</td>
+                    <td>@row["fecha"]</td>
+                    <td class="ocultar-d text-center">
+                        <a asp-controller="Claims" asp-action="DownloadFile" asp-route-fileName='@row["nombre_archivo"]' asp-route-empresa='@row["empresa"]'
+                   target="_blank" class="btn btn-light btn-sm" title="Download" data-bs-toggle="tooltip" data-bs-placement="top">
+                            <i class="fa fa-download" ></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data uploads</div>
+}
+
+
+

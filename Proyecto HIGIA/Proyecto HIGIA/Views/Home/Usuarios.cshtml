@@ -1,0 +1,61 @@
+﻿@model Proyecto_HIGIA.Models.Usuario
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="m-5">
+    <div class="container">
+        <div class="card mb-5">
+            <div class="card-header alert-success">
+                <strong>Añadir Usuario</strong>
+            </div>
+
+            <div class="card-body form-inline">
+                <div class="col-md-4">
+                    Login Windows<span class="asterisco_rojo"></span>
+                    <input class="form-control" id="login" name="login" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el login')"
+                           oninput="this.setCustomValidity('')" maxlength="30" style="width: 100%;" />
+                </div>
+                <div class="col-md-5">
+                    Nombre<span class="asterisco_rojo"></span>
+                    <input class="form-control" id="nombre" name="nombre" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el nombre')"
+                           oninput="this.setCustomValidity('')" maxlength="100" style="width: 100%;" />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <button class="btn btn-success nivel1" id="btn_guardar_usuario" data-request-url="@Url.Action("GuardarUsuario", "Home")"><i class="fa fa-save"></i>&nbsp;AÑADIR</button>
+                    <partial name="Alerta" />
+                </div>
+            </div>
+        </div>
+        <form id="formListaUsuarios" asp-antiforgery="false">
+
+            <table class="table datatable_usuarios" id="tabla_usuarios" style="width: 100%;">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="display: none">
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.login).ToUpper()
+                        </th>
+                        <th data-toggle="tooltip" data-placement="top" data-html="false" title="Para editar el nombre de usuario haga doble click sobre él">
+                            @Html.DisplayNameFor(model => model.nombre).ToUpper()
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+</div>
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    modulo_usuarios.init();
+</script>
+}

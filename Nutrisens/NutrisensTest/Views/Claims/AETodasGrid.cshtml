@@ -1,0 +1,76 @@
+﻿@using System.Data
+
+@model DataTable
+
+
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped datatable_AE_todas" id="grid_AE_todas">
+        <thead class="text-white bg-secondary">
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Person in charge
+                </th>
+                <th>
+                    Claim Code
+                </th>
+                <th>
+                    Company
+                </th>
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Deadline
+                </th>
+
+                <th class="ocultar-d"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td class="CodigoAE">
+                        @row["CodigoAE"]
+                    </td>
+                    <td class="NombreResponsable">
+                        @row["NombreResponsable"]
+                    </td>
+                    <td class="CodigoClaim">
+                        @row["CodigoClaim"]
+                    </td>
+                    <td class="NombreEmpresa">
+                        @row["NombreEmpresa"]
+                    </td>
+                    <td class="NombreEstado">
+                        @row["NombreEstado"]
+                    </td>
+
+                    <td class="FechaLimite">
+                        @{
+                            if (DateTime.TryParse(row["FechaLimite"].ToString(), out DateTime fecha_limite))
+                            {
+                                <span>@fecha_limite.ToString("dd-MM-yyyy")</span>
+                            }
+                        }
+                    </td>
+                    <td class="ocultar-d text-end" style="font-size: 14px;">
+                        <a asp-controller="Claims" asp-action="ClaimsDetail" asp-route-codigo='@row["CodigoClaim"]' target="_blank" title="View Claim">
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+}

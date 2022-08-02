@@ -1,0 +1,132 @@
+﻿@using Nutrisens.Data
+@using Nutrisens.Models
+
+
+@model Nutrisens.Models.SingleFileModel
+
+@{
+    ViewData["Title"] = "Data Uploads";
+
+    string perfil = ViewData["perfil"].ToString();
+    string nivel = ViewData["nivel"].ToString();
+    string seccion = ViewData["seccion"].ToString();
+
+    List<Empresa> listaEmpresas = ViewBag.empresas;
+
+}
+
+<partial name="Cargando" />
+
+<partial name="Alerta" />
+
+<ul class="list-inline float-start">
+    <li>
+        <partial name="BtnIndex" />
+    </li>
+</ul>
+<div class="container">
+    @if (nivel == "1")
+    {
+        <div class="card">
+            <div class="card-header bg-success">
+                <strong class="text-white">Upload File</strong>
+            </div>
+            <div class="card-body">
+                <form asp-action="UploadFile" asp-controller="Claims" method="post" enctype="multipart/form-data">
+                    @if (Model.IsResponse)
+                    {
+                        if (Model.IsSuccess)
+                        {
+                            <div class="alert alert-success">
+                                @Model.Message
+                                <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger">
+                                @Model.Message
+                                <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        }
+                    }
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Company</label>
+                            <select id="desp_empresas_simple" class="form-select" asp-for="Empresa">
+                                @foreach (var item in listaEmpresas)
+                                {
+                                    <option value="@item.Id">@Html.DisplayFor(modelItem => item.NombreEmpresa)</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Empresa" class="text-danger"></span>
+                        </div>
+                        <div class="col-3">
+                            <label>Data Load Type</label>
+                            <select class="form-select" asp-for="Tipo">
+                                <!option value="C">Customers</!option>
+                                <!option value="R">References</!option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <label>Select File</label>
+                            <input asp-for="File" class="form-control" />
+                            <span asp-validation-for="File" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 mt-3">
+                        <button type="submit" class="btn btn-success" onclick="$('#AjaxLoader').show();"><i class="fa fa-upload"></i> Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div id="div_grid_cargas" class="mt-5">
+    </div>
+</div>
+
+
+@section Scripts {
+<script type="text/javascript">
+
+    $(document).ready(function () {
+            // Espera a que terminen todas las funciones ajax
+            $.when(ObtenerCargas()).done(function (a1) {
+                $("#AjaxLoader").hide();
+                scripts.init();
+              });
+
+        });
+
+    // Función para mostrar el desplegable con los perfiles
+        ObtenerCargas = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerListaCargas", "Claims")",
+                data: {
+
+                },
+                type: "POST",
+                cache: false,
+                async: false // Para que funcionen correctamente las líneas dentro del $.when el método ajax no debe ser asíncrono
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#div_grid_cargas").html(result);
+                        
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+</script>
+}

@@ -1,0 +1,493 @@
+﻿@using System.Data
+@model DataTable
+
+
+@{
+    ViewData["Title"] = "User Management";
+
+    string nivel = ViewData["nivel"].ToString();
+}
+
+<partial name="Cargando" />
+
+<!-- Ventana modal para editar-->
+<div id="ventana_editar_usuario" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Edit user <label id="lbl_nombre_usuario"></label></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hidden_usuario" />
+
+                <div class="row">
+                    <div id="div_aplicaciones" class="col-6 fw-bold"></div>
+                    <div class="col-6 d-none" id="div_perfil"></div>
+                </div>
+                <div class="row d-none mt-3" id="div_accesos">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="float-start">
+                    <button type="button" class="btn btn-success text-white d-none" id="btn_guardar_accesos">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+                <button type="button" class="btn btn-warning float-end text-white" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para editar las empresas del usuario-->
+<div id="ventana_editar_empresas" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Edit companies for <label id="lbl_nombre_usuario_empresas"></label></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hidden_usuario_empresas" />
+
+                <div id="div_empresas"></div>
+
+                <p class="small mt-2 text-warning">To select more than one company hold Ctrl key</p>
+            </div>
+            <div class="modal-footer">
+                <div class="float-start">
+                    <button type="button" class="btn btn-success text-white" id="btn_guardar_empresas">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+                <div class="float-end">
+                    <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+
+<div class="container">
+
+    <partial name="Alerta" />
+    @if (nivel == "1")
+    {
+        <div class="row mb-3">
+            <div class="col-2">
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn_nuevo_usuario btn btn-info"><i class="fa fa-plus"></i> Add User</a>
+            </div>
+        </div>
+    }
+    @if (Model.Rows.Count > 0)
+    {
+        <form id="formListaUsuarios" asp-antiforgery="false">
+            <table class="table datatable_usuarios" id="grid_usuarios" style="width: 100%;">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            Login
+                        </th>
+                        <th >
+                            Name
+                        </th>
+                        @if (nivel == "1")
+                        {
+                            <th></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in Model.Rows)
+                    {
+                        <tr>
+                            <td class="login_usuario">
+                                @row["login"]
+                            </td>
+                            <td class="nombre_usuario">
+                                @row["NombreCompleto"]
+                            </td>
+                            @if (nivel == "1")
+                            {
+                                <td class="text-center ocultar-d">
+                                    <a href="#" class="btn_editar btn btn-light btn-sm"><i class="fa fa-edit"></i> Edit</a> |
+                                    <a href="#" class="btn_empresas btn btn-light btn-sm"><i class="fa fa-edit"></i> Company</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    }
+    else
+    {
+        <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+    }
+
+</div>
+
+@section Scripts {
+
+<script type="text/javascript">
+    $(document).on('click', '.btn_editar', function (e) {
+        e.preventDefault();
+
+        var fila = $(this).closest("tr");
+
+        var login_usuario = fila.find(".login_usuario").text();
+        var nombre_usuario = fila.find(".nombre_usuario").text();
+
+        nombre_usuario = $.trim(nombre_usuario);
+        login_usuario = $.trim(login_usuario);
+
+        $("#lbl_nombre_usuario").text(nombre_usuario);
+
+        $("#hidden_usuario").val(login_usuario);
+
+        AbrirModal("#ventana_editar_usuario");
+
+        Ocultar('#div_perfil');
+        Ocultar('#div_accesos');
+        Ocultar('#btn_guardar_accesos');
+
+        ObtenerAplicaciones();
+    });
+
+    $(document).on('click', '.btn_empresas', function (e) {
+        e.preventDefault();
+
+        var fila = $(this).closest("tr");
+
+        var login_usuario = fila.find(".login_usuario").text();
+        var nombre_usuario = fila.find(".nombre_usuario").text();
+
+        nombre_usuario = $.trim(nombre_usuario);
+        login_usuario = $.trim(login_usuario);
+
+        $("#lbl_nombre_usuario_empresas").text(nombre_usuario);
+
+        $("#hidden_usuario_empresas").val(login_usuario);
+
+        // Espera a que terminen todas las funciones ajax
+        $.when(ObtenerEmpresasMultiple()).done(function (a1) {
+
+            AbrirModal("#ventana_editar_empresas");
+
+            ObtenerEmpresasUsuario(login_usuario);
+
+            // Hago un focus sobre el select de las empresas, si no ponemos este timeout no funciona
+            setTimeout(function(){
+                $('#desp_empresas').focus();
+            },100);
+        });
+    });
+
+    // Función para mostrar el desplegable con las empresas
+        ObtenerEmpresasMultiple = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerEmpresasMultiple", "Home")",
+                data: {
+
+                },
+                type: "POST",
+                cache: false,
+                async: false // Para que funcionen correctamente las líneas dentro del $.when el método ajax no debe ser asíncrono
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#div_empresas").html(result);
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Función para obtener las empresas asignadas al usuario
+        ObtenerEmpresasUsuario = function (usuario) {
+
+            var select = $("#desp_empresas");
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerEmpresasUsuario", "Home")",
+                data: {
+                     usuario: usuario
+                },
+                type: "POST",
+                cache: false,
+                async: false
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#AjaxLoader").show();
+
+                        // Cuando el dropdown es multi selección le pasamos el array completo
+                        select.val(result);
+                    }
+
+               })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Botón guardar empresas asignadas al usuario
+        $(document).on('click', '#btn_guardar_empresas', function (e) {
+            e.preventDefault();
+
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_empresas").offset();
+
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            // Mandamos los ids de empresas en un string separado por comas
+            var ids = $('#desp_empresas').val().join(",");
+
+            $.ajax({
+                url: "@Url.Action("GuardarEmpresasUsuario", "Home")",
+                data: {
+                    operacion: 'GUARDAR-EMPRESAS',
+                    usuario: $("#hidden_usuario_empresas").val(),
+                    empresas: ids,
+                    usuario_mod: $("#hidden_login_usuario").val()
+                },
+                type: "POST",
+                cache: false
+            })
+                .done(function (result) {
+                    MostrarOk("#alerta", result);
+
+                    CerrarModal();
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        });
+
+        // Función para mostrar el desplegable con las aplicaciones
+        ObtenerAplicaciones = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerAplicaciones", "Home")",
+                data: {
+
+                },
+                type: "POST",
+                cache: false
+            })
+                .done(function (result) {
+                    if (result != null) {
+
+                        $("#div_aplicaciones").html(result);
+
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Al cambiar el desplegable de filtro de tipo de análisis
+        $(document).on('change', '#desp_aplicaciones', function (e) {
+            e.preventDefault();
+
+            if ($('#desp_aplicaciones').val() != '') {
+            $.when(ObtenerSecciones()).done(function (a1) {
+                Mostrar('#div_perfil');
+                Mostrar('#div_accesos');
+                Mostrar('#btn_guardar_accesos');
+                ObtenerPerfiles();
+            });
+            } else {
+                Ocultar('#div_perfil');
+                Ocultar('#div_accesos');
+                Ocultar('#btn_guardar_accesos');
+                $('#desp_perfiles').val('');
+            }
+
+        });
+
+        // Función para mostrar el desplegable con los perfiles
+        ObtenerPerfiles = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerPerfiles", "Home")",
+                data: {
+
+                },
+                type: "POST",
+                cache: false
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#div_perfil").html(result);
+                        ObtenerPerfilUsuario();
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Función para mostrar las secciones
+        ObtenerSecciones = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerSeccionesUsuario", "Home")",
+                data: {
+                    aplicacion: $('#desp_aplicaciones').val(),
+                    usuario: $("#hidden_usuario").val()
+                },
+                type: "POST",
+                cache: false,
+                async: false
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#div_accesos").html(result);
+                    }
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Botón guardar accesos del usuario
+        $(document).on('click', '#btn_guardar_accesos', function (e) {
+            e.preventDefault();
+
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_accesos").offset();
+
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var num_secciones = $('#hidden_num_secciones').val();
+
+            GuardarPerfil();
+
+            for(let i=1; i<=num_secciones; i++)
+            {
+                $.ajax({
+                    url: "@Url.Action("GuardarAccesos", "Home")",
+                    data: {
+                        usuario: $("#hidden_usuario").val(),
+                        seccion: eval($('#desp_seccion_' + i)).attr('title'), // En el title guardamos el id de la sección
+                        nivel: eval($('#desp_seccion_' + i)).val(),
+                        usuario_mod: $("#hidden_login_usuario").val()
+                    },
+                    type: "POST",
+                    cache: false
+                      })
+                    .done(function (result) {
+
+                    })
+                    .fail(function (xhr, status, error) {
+                        MostrarError("#alerta", xhr.responseText);
+                    })
+                    .always(function () {
+                        $("#AjaxLoader").hide();
+                    });
+            }
+
+            MostrarOk("#alerta", "User permissions saved successfully");
+
+            CerrarModal();
+        });
+
+        // Función para guardar el perfil del usuario
+        GuardarPerfil = function () {
+
+            $.ajax({
+                url: "@Url.Action("GuardarPerfil", "Home")",
+                data: {
+                    aplicacion: $('#desp_aplicaciones').val(),
+                    usuario: $("#hidden_usuario").val(),
+                    perfil: $("#desp_perfiles").val(),
+                    usuario_mod: $("#hidden_login_usuario").val()
+                },
+                type: "POST",
+                cache: false
+            })
+                .done(function (result) {
+
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+        // Función para obtener los accesos del usuario
+        ObtenerPerfilUsuario = function () {
+
+            $("#AjaxLoader").show();
+
+            $.ajax({
+                url: "@Url.Action("ObtenerPerfilUsuario", "Home")",
+                data: {
+                     usuario: $("#hidden_usuario").val(),
+                     aplicacion: $('#desp_aplicaciones').val()
+                },
+                type: "POST",
+                cache: false,
+                async: false
+            })
+                .done(function (result) {
+                    if (result != null) {
+                        $("#desp_perfiles").val(result.perfil);
+
+                    }
+
+               })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+        }
+
+</script>
+}

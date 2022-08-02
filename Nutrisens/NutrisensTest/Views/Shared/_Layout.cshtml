@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NutrisensTest.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/fontawesome.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/Buttons-2.2.2/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="~/lib/datatables/FixedHeader-3.2.2/css/fixedHeader.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="~/lib/flatpickr/flatpickr.min.css" />
+
+    <link rel="stylesheet" href="~/lib/select2/select2.min.css">
+    <link rel="stylesheet" href="~/lib/select2/select2-bootstrap-5-theme.min.css">
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.css">
+
+    <link rel="stylesheet" href="~/lib/datepicker/bootstrap-datepicker.standalone.min.css">
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo_nutrisens_transp_web.png" alt="Nutrisens" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav col ps-5">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Home Page"><i class="fa fa-home"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="Claims" asp-action="Index" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Claims"><i class="fa fa-bullhorn"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="PDP" asp-action="Index" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Product Development Proposal"><i class="fa fa-lg fa-bottle-water"></i></a>
+                        </li>
+                    </ul>
+                    @{
+                        string titulo = ViewData["Title"].ToString();
+
+                        if (titulo == "Home Page")
+                        {
+                            titulo = "";
+                        }
+                    }
+                    <h3 class="col" id="label_cabecera">
+                        @titulo
+                    </h3>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-white">
+        <div class="container">
+            &copy; @DateTime.Now.Year Nutrisens
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/lib/fontawesome/js/all.js"></script>
+    <script src="~/lib/fontawesome/js/fontawesome.min.js"></script>
+    <script src="~/lib/fontawesome/js/fontawesome.min.js"></script>
+    <script src="~/lib/flatpickr/flatpickr.js"></script>
+
+    <!-- DataTables -->
+    <script src="~/lib/datatables/DataTables-1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/DataTables-1.11.5/js/dataTables.dataTables.min.js"></script>
+    <script src="~/lib/datatables/DataTables-1.11.5/js/dataTables.jqueryui.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+    <!-- DataTables Buttons -->
+    <script src="~/lib/datatables/Buttons-2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables/JSZip-2.5.0/jszip.min.js"></script>
+    <script src="~/lib/datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
+    <script src="~/lib/datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+    <script src="~/lib/datatables/Buttons-2.2.2/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables/Buttons-2.2.2/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/datatables/Buttons-2.2.2/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables/FixedHeader-3.2.2/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/lib/datatables/FixedHeader-3.2.2/js/fixedHeader.bootstrap5.min.js"></script>
+
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="~/lib/moment/moment.min.js"></script>
+
+    <script src="~/lib/moment/datetime-moment.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.js"></script>
+
+    <script src="~/lib/datepicker/bootstrap-datepicker.min.js"></script>
+
+    <!-- InputMask -->
+    <script type="text/javascript" src="~/lib/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/pdp/helper.js" asp-append-version="true"></script>
+    <script src="~/js/pdp/modulo_index.js" asp-append-version="true"></script>
+    <script src="~/js/pdp/modulo_new_proposal.js" asp-append-version="true"></script>
+    <script src="~/js/pdp/modulo_nutricional_information.js" asp-append-version="true"></script>
+    <script src="~/js/pdp/modulo_comments.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            scripts.init();
+        });
+    </script>
+</body>
+</html>

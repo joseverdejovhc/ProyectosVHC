@@ -1,0 +1,33 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.pastilla-index {
+    min-height: 100px;
+}
+
+a.enlace-index {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+dtrg-group dtrg-start dtrg-level-0 {
+    background: #c7c5c5ee;
+}

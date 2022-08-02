@@ -1,0 +1,10 @@
+﻿@model List<Nutrisens.Models.Perfil>
+
+<label class="form-label">Role</label>
+<select id="desp_perfiles" class="form-select">
+    <option value=""></option>
+    @foreach (var item in Model)
+    {
+        <option value="@item.Id">@Html.DisplayFor(modelItem => item.NombrePerfil)</option>
+    }
+</select>

@@ -1,0 +1,310 @@
+﻿
+
+<div class="row mt-3">
+    <div class="col-4">
+
+        <div class="form-check form-check-inline mt-3">
+            <input class="form-check-input" name="unit" type="radio" id="100g" value="100g">
+            <label class="form-check-label" for="100g">Per 100 g</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" name="unit" type="radio" id="100ml" value="100ml">
+            <label class="form-check-label" for="100ml">Per 100 ml</label>
+        </div>
+
+        <table class="table table-striped datatable" id="tabla_macronutrients" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Macronutrients</th>
+                    <th>Unit</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Energy</td>
+                    <td><input type="text" class="form-control" value="Kcal" name="Energy*unidad" readonly /></td>
+                    <td><input type="number" step="any" name="Energy" class="form-control" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Proteins</td>
+                    <td><input type="text" class="form-control" value="g" name="Proteins*unidad" readonly /></td>
+                    <td><input type="number" step="any" name="Proteins" class="form-control" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Protein profile</td>
+                    <td><input type="text" class="form-control" /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Carbohydrates</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Of wich sugars</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Carbohydrates Profile</td>
+                    <td><input type="text" class="form-control" /></td>
+                    <td><input type="number" class="form-control decimales" step="any" /></td>
+                </tr>
+                <tr>
+                    <td>Total fat</td>
+                    <td><input type="text" class="form-control" value="g" name="Total fat*unidad" readonly /></td>
+                    <td><input type="number" step="any" class="form-control decimales" name="Total fat" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Of which saturates</td>
+                    <td><input type="text" class="form-control" /></td>
+                    <td><input type="number" class="form-control" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Monounsaturates</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Polyunsaturates</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Omega 6</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Omega 3</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>EPA</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>DHA</td>
+                    <td><input type="text" class="form-control" value="g" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Others</td>
+                    <td><input type="text" class="form-control" /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Dietary fibre</td>
+                    <td><input type="text" class="form-control" value="g" name="Dietary fibre*unidad" readonly /></td>
+                    <td><input type="number" class="form-control decimales" step="any" name="Dietary fibre" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Fibre profile</td>
+                    <td><input type="text" class="form-control" /></td>
+                    <td><input type="number" class="form-control decimales" step="any" min="0" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-4">
+
+        <div class="form-check form-check-inline mt-3">
+            <input class="form-check-input" name="unit_minerals" type="radio" id="fsmp_minerals" value="fsmp">
+            <label class="form-check-label" for="fsmp_minerals">FSMP Range</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" name="unit_minerals" type="radio" id="other_minerals" value="other">
+            <label class="form-check-label" for="other_minerals">Other Value</label>
+        </div>
+
+        <table class="table table-striped datatable" id="tabla_minerals" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Minerals</th>
+                    <th>Unit</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Calcium</td>
+                    <td><input type="text" class="form-control minerales" name="Calcium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Calcium" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Phosphorous</td>
+                    <td><input type="text" class="form-control minerales" name="Phosphorous*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Phosphorous" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Potasium</td>
+                    <td><input type="text" class="form-control minerales" name="Potasium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Potasium" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Sodium</td>
+                    <td><input type="text" class="form-control minerales" name="Sodium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Sodium" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Chloride</td>
+                    <td><input type="text" class="form-control" name="Chloride*unidad" /></td>
+                    <td><input type="number" class="form-control decimales" step="any" name="Chloride" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Iron</td>
+                    <td><input type="text" class="form-control minerales" name="Iron*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Iron" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Zinc</td>
+                    <td><input type="text" class="form-control minerales" name="Zinc*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Zinc" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Copper</td>
+                    <td><input type="text" class="form-control minerales" name="Copper*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Copper" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Iodine</td>
+                    <td><input type="text" class="form-control minerales" name="Iodine*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Iodine" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Slenium</td>
+                    <td><input type="text" class="form-control minerales" name="Slenium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Slenium" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Magnesium</td>
+                    <td><input type="text" class="form-control minerales" name="Magnesium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Magnesium" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Manganese</td>
+                    <td><input type="text" class="form-control minerales" name="Manganese*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Manganese" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Fluoride</td>
+                    <td><input type="text" class="form-control minerales" name="Fluoride*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Fluoride" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Molybenum</td>
+                    <td><input type="text" class="form-control minerales" name="Molybenum*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Molybenum" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Chromium</td>
+                    <td><input type="text" class="form-control minerales" name="Chromium*unidad" /></td>
+                    <td><input type="number" class="form-control decimales minerales" step="any" name="Chromium" min="0" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-4">
+
+        
+        <div class="form-check form-check-inline mt-3">
+            <input class="form-check-input" name="unit_vitamins" type="radio" id="fsmp_vitamins" value="fsmp">
+            <label class="form-check-label" for="fsmp_vitamins">FSMP Range</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" name="unit_vitamins" type="radio" id="other_vitamins" value="other">
+            <label class="form-check-label" for="other_vitamins">Other Value</label>
+        </div>
+
+        <table class="table table-striped datatable" id="tabla_vitamins" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Vitamins</th>
+                    <th>Unit</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A</td>
+                    <td><input type="text" class="form-control vitamins" name="A*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="A" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td><input type="text" class="form-control vitamins" name="D*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="D" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>E</td>
+                    <td><input type="text" class="form-control vitamins" name="E*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="E" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td><input type="text" class="form-control vitamins" name="C*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="C" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Tiamin</td>
+                    <td><input type="text" class="form-control vitamins" name="Tiamin*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Tiamin*" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Riboflavin</td>
+                    <td><input type="text" class="form-control vitamins" name="Riboflavin*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Riboflavin" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Niacin</td>
+                    <td><input type="text" class="form-control vitamins" name="Niacin*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Niacin" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>B6</td>
+                    <td><input type="text" class="form-control vitamins" name="B6*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="B6" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Folic Acid</td>
+                    <td><input type="text" class="form-control vitamins" name="Folic Acid*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Folic Acid" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>B12</td>
+                    <td><input type="text" class="form-control vitamins" name="B12*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="B12" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Biotin</td>
+                    <td><input type="text" class="form-control vitamins" name="Biotin*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Biotin" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>Pantothenic Acid</td>
+                    <td><input type="text" class="form-control vitamins" name="Pantothenic Acid*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="Pantothenic Acid" min="0" /></td>
+                </tr>
+                <tr>
+                    <td>K</td>
+                    <td><input type="text" class="form-control vitamins" name="K*unidad" /></td>
+                    <td><input type="number" class="form-control decimales vitamins" step="any" name="K" min="0" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="row mt-3" style="margin-left: 0px;">
+    <label for="comments" class="col-sm-1 col-form-label" style="background-color: #2742c5;color: white;">Comments / Other nutrients</label>
+    <div class="col-sm-11">
+        <textarea class="form-control" id="comments" name="comments"></textarea>
+    </div>
+</div>
+

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>DataSource1</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@num_pedido">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>SELECT cm.NOM as nombre_cliente, cm.CIFDNI as nif_cliente,cm.adreca as direccion,
+	CONCAT(cm.DIP, ' ', pob.poblacion) as poblacion, CONCAT(pob.PROVINCIA,' ',pob.PAIS) as pais
+	FROM DB2DASQL.S06CEFER.EGFITV5H.TRANSDAT td
+	inner join (select tc.anyd,tc.NFUL,tc.COM FROM DB2DASQL.S06CEFER.EGFITV5H.TRANSCAP tc) tc on tc.NFUL=td.NFUL and td.ANYD=tc.ANYD
+	inner join DB2DASQL.S06CEFER.EGFITV5H.COMPTSSS cm on cm.COM=tc.COM
+	inner join (select cp, POBLACION, PROVINCIA, PAIS FROM [IMPORTACIONES].[dbo].[ERP_POBLACIONES] pob) pob on pob.cp=cm.dip
+	WHERE td.NUMDAT=@num_pedido and td.TIPDAT='N';</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="nombre_cliente">
+        <DataField>nombre_cliente</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="nif_cliente">
+        <DataField>nif_cliente</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="direccion">
+        <DataField>direccion</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="poblacion">
+        <DataField>poblacion</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="pais">
+        <DataField>pais</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

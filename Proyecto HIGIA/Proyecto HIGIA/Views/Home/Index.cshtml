@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-12 mt-5">
+            <a class="enlace-index" asp-controller="Home" asp-action="Presupuestos" OnClick="helper.stop_all_ajax()">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="text-info fa fa-3x fa-coins"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">PRESUPUESTO</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-4 col-12 mt-5">
+            <a class="enlace-index" asp-controller="Home" asp-action="Pedidos" OnClick="helper.stop_all_ajax()">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="text-info fa fa-3x fa-file-contract"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">CONTRATOS/PEDIDOS</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-4 col-12 mt-5">
+            <a class="enlace-index" asp-action="Facturas" asp-controller="Home" OnClick="helper.stop_all_ajax()">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="text-info fa fa-3x fa-file-invoice"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">FACTURAS</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-4 col-12 mt-5">
+            <a class="enlace-index" asp-controller="Home" asp-action="SeguimientoPresupuesto" OnClick="helper.stop_all_ajax()">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="text-info fa fa-3x fa-eye"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">SEGUIMIENTO DE PRESUPUESTO</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-4 col-12 mt-5">
+            <a class="enlace-index" asp-controller="Home" asp-action="Usuarios" OnClick="helper.stop_all_ajax()">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="text-info fa fa-3x fa-user"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">USUARIOS</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+</div>

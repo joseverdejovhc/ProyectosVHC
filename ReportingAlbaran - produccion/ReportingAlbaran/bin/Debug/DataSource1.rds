@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DataSource1">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=AURABBDD\MSSQLSERVER2012;Initial Catalog=INTRANET</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>826f5f0d-432b-4632-9138-1b461fd6a3b4</DataSourceID>
+</RptDataSource>

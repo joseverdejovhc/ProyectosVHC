@@ -1,0 +1,173 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Referencias";
+}
+
+
+<div id="ventana_refs" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Editar Referencia</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hidden_id_usuario" />
+                <div id="div_creacion">
+                    <div class="col-md-6 form-group mt-3">
+                        Codire:<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="codire" name="login" type="number" value="" required oninvalid="this.setCustomValidity('Debe rellenar el login')"
+                               oninput="this.setCustomValidity('')" maxlength="30" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Código Alternativo:<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="cod_alt" name="login" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el login')"
+                               oninput="this.setCustomValidity('')" maxlength="30" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Nombre:<span class="asterisco_rojo"></span>
+                        <input class="form-control" id="nomref" name="login" type="text" value="" required oninvalid="this.setCustomValidity('Debe rellenar el login')"
+                               oninput="this.setCustomValidity('')" maxlength="30" style="width: 100%;" />
+                    </div>
+                    <div class="col-md-6 form-group mt-3">
+                        Agrupación:
+                        <select class="form-control" id="sele_agrupacion_creacion">
+                            <option value="0" selected></option>
+                            <option value="1">Nutricion Medica</option>
+                            <option value="2">Preparados Polvo</option>
+                            <option value="3">Transporte</option>
+                            <option value="4">UHT Botella</option>
+                            <option value="5">UHT Brik</option>
+                            <option value="6">MULTISABOR</option>
+                            <option value="7">Comercializados</option>
+                            <option value="8">Ingrediente Activo</option>
+                            <option value="9">Exclusivo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btn_guardar_modal" class="btn btn-success float-left text-white" data-bs-dismiss="modal">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_add_refs" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Añadir Referencia</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tabla_add_referencias" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Codire</th>
+                            <th>Código Alternativo</th>
+                            <th>Referencia</th>
+                            <th>Tipo de Referencia</th>
+                            <th>Añadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btn_add_reference_modal" type="button" class="btn btn-success float-left text-white">
+                    Guardar
+                </button>
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="Alerta" />
+<partial name="Cargando" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-light">
+            <strong><i class="fa fa-filter"></i>&nbsp;FILTROS</strong>
+            <div class="toolt left float-right" style="z-index: 900;">
+                <div class="tiptext" style="width: 800px;">
+                    <p>El objetivo de esta pantalla es asignar a cada una de las referencias incluidas bien en el presupuesto de ventas, bien en el presupuesto de producción, una Agrupación, la cual permitirá posteriormente agrupar las referencias en diferentes tipos y obtener su margen bruto.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="chk_sin_agrupacion">
+                            <label class="form-check-label" for="chk_sin_agrupacion">Ver referencias sin Agrupación</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4">
+                        Agrupación:
+                        <select class="form-control" id="sel_agrupacion">
+                            <option value="" selected></option>
+                            <option value="1">Nutricion Medica</option>
+                            <option value="2">Preparados Polvo</option>
+                            <option value="3">Transporte</option>
+                            <option value="4">UHT Botella</option>
+                            <option value="5">UHT Brik</option>
+                            <option value="6">MULTISABOR</option>
+                            <option value="7">Comercializados</option>
+                            <option value="8">Ingrediente Activo</option>
+                            <option value="9">Exclusivo</option>
+                        </select>
+                    </div>
+                    <div class="col-2 mt-4">
+                        <button id="btn_nueva_referencia" class="btn btn-warning nivel1">Nueva Referencia</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <table class="table table-striped" id="tabla_referencias" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Código</th>
+                    <th>Referencia</th>
+                    <th>Agrupación</th>
+                    <th>Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    var permiso = @ViewData["nivel"];
+    modulo_conf_referencias.init(permiso);
+</script>
+}

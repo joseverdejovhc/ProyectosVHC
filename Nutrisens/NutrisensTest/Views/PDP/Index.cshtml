@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "PRODUCT DEVELOPMENT PROPOSALS";
+
+    string perfil = ViewData["perfil"].ToString();
+}
+
+<ul class="nav nav-pills mt-4" id="myTab" role="tablist">
+    <li class="nav-item nav-item-tabs" role="presentation">
+        <a class="nav-link nav-link-tabs active" id="my-proposals-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#my-proposals" type="button" role="tab" aria-controls="home" aria-selected="true">My Proposals</a>
+    </li>
+
+    @if (perfil != "4")
+    {
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="proposals-pending-my-appoval-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#proposals-pending-my-appoval-proposals" type="button" role="tab" aria-controls="profile" aria-selected="false">Proposals pending my approval</a>
+        </li>
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="all-proposals-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#all-proposals" type="button" role="tab" aria-controls="profile" aria-selected="false">All Proposals</a>
+        </li>
+    }
+
+</ul>
+
+<partial name="Alerta" />
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="my-proposals" role="tabpanel" aria-labelledby="my-proposals-tab">
+        <!--<div class="row m-3">
+            <div class="col-3">
+                <a id="btn_new_proposal" class="btn btn-warning" target="_blank" asp-controller="PDP" asp-action="NewProposal" onclick="modulo_index.nuevoproposal();">New Proposal</a>
+            </div>
+        </div>-->
+        <div class="row m-3">
+            <table class="table table-striped datatable" id="tabla_my_proposals" style="width: 100%;">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th>Code</th>
+                        <th>Creator</th>
+                        <th>Date</th>
+                        <th>Project Name</th>
+                        <th>State</th>
+                        <th>Company</th>
+                        <th>Ver</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    @if (perfil != "4")
+    {
+        <div class="tab-pane fade" id="proposals-pending-my-appoval-proposals" role="tabpanel" aria-labelledby="proposals-pending-my-appoval-tab">
+            <div class="row m-3">
+                <table class="table table-striped datatable" id="tabla_my_appoval_proposals" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Code</th>
+                            <th>Creator</th>
+                            <th>Date</th>
+                            <th>Project Name</th>
+                            <th>State</th>
+                            <th>Company</th>
+                            <th>Ver</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="all-proposals" role="tabpanel" aria-labelledby="all-proposals-tab">
+            <div class="row m-3">
+                <table class="table table-striped datatable" id="tabla_all_proposals" style="width: 100%;">
+                    <thead class="bg-secondary text-white">
+                        <tr>
+                            <th>Code</th>
+                            <th>Creator</th>
+                            <th>Date</th>
+                            <th>Project Name</th>
+                            <th>State</th>
+                            <th>Company</th>
+                            <th>Ver</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+
+<script type="text/javascript">
+    modulo_index.init();
+</script>
+}

@@ -1,0 +1,12 @@
+﻿@using Nutrisens.Models
+
+@model List<Nutrisens.Models.Empresa>
+
+
+<label for="desp_empresas_simple" class="form-label">Company</label>
+<select id="desp_empresas_simple" class="form-select" name="Empresa">
+    @foreach (var item in Model)
+    {
+        <option value="@item.Id" >@Html.DisplayFor(modelItem => item.NombreEmpresa)</option>
+    }
+</select>

@@ -1,0 +1,36 @@
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\appsettings.Development.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\appsettings.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.staticwebassets.runtime.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.exe
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.deps.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.runtimeconfig.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\ref\Proyecto HIGIA.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Proyecto HIGIA.pdb
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.csproj.AssemblyReference.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.AssemblyInfoInputs.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.AssemblyInfo.cs
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.csproj.CoreCompileInputs.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.RazorAssemblyInfo.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.RazorAssemblyInfo.cs
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\staticwebassets.build.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\staticwebassets.development.json
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\scopedcss\bundle\Proyecto HIGIA.styles.css
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\scopedcss\projectbundle\Proyecto HIGIA.bundle.scp.css
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\ref\Proyecto HIGIA.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.pdb
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.genruntimeconfig.cache
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\obj\Debug\net6.0\Proyecto HIGIA.csproj.CopyComplete
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Projects\Proyecto HIGIA\Proyecto HIGIA\bin\Debug\net6.0\System.IO.Packaging.dll

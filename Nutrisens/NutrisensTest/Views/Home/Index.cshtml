@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+
+    string perfil = ViewData["perfil"].ToString();
+}
+
+<partial name="Cargando" />
+
+<div class="container">
+    <div class="row mt-5">
+        @if (perfil == "1" || perfil == "2")
+        {
+            <div class="col-4 mt-5">
+                <a class="enlace-index" asp-controller="Home" asp-action="Usuarios">
+                    <div class="card bg-light pastilla-index card-hover">
+                        <div class="row h-100 my-auto">
+                            <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                                <i class="fa fa-3x fa-users rojo_nutrisens"></i>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">User Management</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="Claims" asp-action="Index">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-bullhorn rojo_nutrisens"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Claims</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-4 mt-5">
+            <a class="enlace-index" asp-controller="PDP" asp-action="Index">
+                <div class="card bg-light pastilla-index card-hover">
+                    <div class="row h-100 my-auto">
+                        <div class="col-md-4 justify-content-center align-self-center text-center mt-3 mt-md-0">
+                            <i class="fa fa-3x fa-bottle-water rojo_nutrisens"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Development Proposal</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).on('click', '.enlace-index', function (e) {
+            e.preventDefault();
+            // Mostramos el Ajax Loader
+            $("#AjaxLoader").show();
+
+            window.location.href = this.href;
+        });
+    </script>
+}
+
+

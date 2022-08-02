@@ -1,0 +1,98 @@
+﻿@using System.Data
+
+@model DataTable
+
+@{
+    /* Si no pasara el nivel con el VewData tendría que hacerlo así
+    int nivel = 0;
+
+    AccesoDatos accesoDatos = new AccesoDatos();
+
+    string login = User.Identity.Name;
+
+    int perfil = accesoDatos.GetPerfil(login, 1);
+
+    if (perfil == 1)
+    {
+        nivel = 1;
+    }
+    else
+    {
+        nivel = accesoDatos.GetNivel(login, 1);
+    }
+    */
+
+    string nivel = ViewData["nivel"].ToString();
+}
+
+
+
+@if (Model.Rows.Count > 0)
+{
+    <table class="table table-striped datatable_lotes" id="grid_lotes">
+        <thead class="text-white bg-secondary">
+            <tr>
+                <th>
+                    Code
+                </th>
+                <th class="ordenado_por_defecto">
+                    Reference
+                </th>
+                <th>
+                    Batch Number
+                </th>
+                <th>
+                    Unit
+                </th>
+                <th>
+                    Quantity
+                </th>
+                @{
+                    if (nivel == "1")
+                    {
+                        <th class="ocultar-d"></th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td class="CodigoRef">
+                        @row["CodigoRef"]
+                    </td>
+                    <td class="NombreRef">
+                        @row["NombreRef"]
+                    </td>
+                    <td class="NumeroLote">
+                        @row["NumeroLote"]
+                    </td>
+                    <td class="Unidad">
+                        @row["Unidad"]
+                    </td>
+                    <td class="Cantidad text-end">
+                        @{
+                            if (decimal.TryParse(row["Cantidad"].ToString(), out decimal cantidad))
+                            {
+                                <span>@cantidad.ToString("N2")</span>
+                            }
+                        }
+                    </td>
+                    @{
+                        if (nivel == "1")
+                        {
+                            <td class="ocultar-d text-end" style="font-size: 14px;">
+                                <button type="button" class="btn btn-light btn-sm nivel1 btn_eliminar_lote ocultar-d" title="Delete Batch"><i class="fa fa-trash text-dark"></i></button>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="bg-light col-12 text-center pt-2 pb-2">No data</div>
+}

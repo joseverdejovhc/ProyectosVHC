@@ -1,0 +1,199 @@
+﻿@{
+    ViewData["Title"] = "Seguimiento Presupuesto";
+}
+<partial name="Alerta" />
+<ul class="nav nav-pills mt-4" id="myTab" role="tablist">
+    <li class="nav-item nav-item-tabs" role="presentation">
+        <a class="nav-link nav-link-tabs active" id="capitulos-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#capitulos" type="button" role="tab" aria-controls="home" aria-selected="true">Capitulos</a>
+    </li>
+    <li class="nav-item nav-item-tabs" role="presentation">
+        <a class="nav-link nav-link-tabs" id="subcapitulos-tab"  data-toggle="tab" data-bs-toggle="pill" data-bs-target="#subcapitulos" type="button" role="tab" aria-controls="profile" aria-selected="false">Subcapitulos</a>
+    </li>
+
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="capitulos" role="tabpanel" aria-labelledby="capitulos-tab">
+        <div class="row mt-3">
+            <table class="table table-striped datatable" id="tabla_capitulos" style="width: 100%;">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th>Código Capítulo</th>
+                        <th>Capitulo</th>
+                        <th>Presupuesto</th>
+                        <th>Pedido</th>
+                        <th>Facturado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="2">Total</th><th class="text-right"></th><th class="text-right"></th><th></th></tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="subcapitulos" role="tabpanel" aria-labelledby="subcapitulos-tab">
+
+        <div class="row mt-3 mb-3 card">
+            <div class="card-header bg-light">
+                <strong><i class="fa fa-filter"></i> FILTROS</strong>
+            </div>
+            <div class="card-body">
+                <span>Capítulo</span>
+                <select id="sel_capitulo" class="form-control filtrar w-25">
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-3 mb-3">
+            <div class="col-4">
+                <button id="btn_desglose_pedidos" class="btn btn-warning">Desglose Pedidos</button>
+            </div>
+            <div class="col-4">
+                <button id="btn_desglose_facturas" class="btn btn-warning">Desglose Facturas</button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-striped datatable" id="tabla_subcapitulos" style="width: 100%;">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th>Código Capítulo</th>
+                        <th>Capitulo</th>
+                        <th>Código Subcapítulo</th>
+                        <th>Subcapítulo</th>
+                        <th>Presupuesto</th>
+                        <th>Pedido</th>
+                        <th>Facturado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><th colspan="4">Total</th><th class="text-right"></th><th class="text-right"></th><th class="text-right"></th></tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_desglose_pedidos" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Desglose Pedidos</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row mt-3 mb-3 card">
+                    <div class="card-header bg-light">
+                        <strong><i class="fa fa-filter"></i> FILTROS</strong>
+                    </div>
+                    <div class="card-body">
+                        <span>Capítulo</span>
+                        <select id="sel_capitulo_pedidos" class="form-control filtrar w-25">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <table class="table table-striped datatable" id="tabla_desglose_pedidos" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>NºPedido</th>
+                                <th>Código</th>
+                                <th>Proveedor</th>
+                                <th>Código Capítulo</th>
+                                <th>Capítulo</th>
+                                <th>Código Subcapítulo</th>
+                                <th>Subcapítulo</th>
+                                <th>Pedido</th>
+                                <th>Ir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr><th colspan="7">Total</th><th class="text-right"></th></tr>
+                        </tfoot>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ventana_desglose_facturas" class="modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Desglose Facturas</h5>
+                <button type="button" class="close" data-bs-dismiss="modal">
+                    ×
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row mt-3 mb-3 card">
+                    <div class="card-header bg-light">
+                        <strong><i class="fa fa-filter"></i> FILTROS</strong>
+                    </div>
+                    <div class="card-body">
+                        <span>Capítulo</span>
+                        <select id="sel_capitulo_facturas" class="form-control filtrar w-25">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <table class="table table-striped datatable" id="tabla_desglose_facturas" style="width: 100%;">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>NºFactura</th>
+                                <th>NºPedido</th>
+                                <th>Código</th>
+                                <th>Proveedor</th>
+                                <th>Código Capítulo</th>
+                                <th>Capítulo</th>
+                                <th>Código Subcapítulo</th>
+                                <th>Subcapítulo</th>
+                                <th>Facturado</th>
+                                <th>Ir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr><th colspan="8">Total</th><th class="text-right"></th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-right text-white" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="NuevaFactura" />
+
+@section Scripts1{
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    modulo_factura.init();
+    modulo_seguimiento.init();
+</script>
+}

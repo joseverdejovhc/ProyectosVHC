@@ -1,0 +1,261 @@
+﻿@model NutrisensTest.Models.Proposal
+@using Microsoft.AspNetCore.Identity
+@using Nutrisens.Areas.Identity.Data;
+
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Proposal";
+
+    string perfil = ViewData["perfil"].ToString();
+    string nombre = ViewData["nombre_perfil"].ToString();
+    ApplicationUser applicationUser = (ApplicationUser)await UserManager.GetUserAsync(User);
+    var nombreCompleto = applicationUser.NombreCompleto;
+}
+
+
+<partial name="Cargando" />
+
+<div class="m-2">
+    <form id="form-proposal" autocomplete="off">
+        <div class="row mb-3">
+            <div class="col-4 form-group row">
+                <label for="number" class="col-sm-4 col-form-label">Number</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="number" name="number" readonly>
+                </div>
+            </div>
+            <div class="col-4 form-group row">
+                <label for="company" class="col-sm-4 col-form-label">Company<i class="asterisco_rojo"></i></label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="company" name="company"></select>
+                </div>
+            </div>
+            <div class="col-4 form-group row">
+                <label for="business_unit" class="col-sm-4 col-form-label">Business Unit<i class="asterisco_rojo"></i></label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="business_unit" name="business_unit">
+                        <option value="" disabled selected>Please select</option>
+                        <option value="spain">Spain</option>
+                        <option value="italy">Italy</option>
+                        <option value="france">France</option>
+                        <option value="internacional">International</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-4 form-group row">
+                <label for="creator" class="col-sm-4 col-form-label">Creator</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="creator" name="creator" value='@nombreCompleto' readonly>
+                </div>
+            </div>
+            <div class="col-4 form-group row">
+                <label for="state" class="col-sm-4 col-form-label">State</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="state" name="state" value="Pending to send" readonly>
+                </div>
+            </div>
+            <div class="col-4 form-group row">
+                <label for="approval_date" class="col-sm-4 col-form-label">Approval Date</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="approval_date" name="approval_date" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-4 form-group row">
+                <label for="approver_1" class="col-sm-4 col-form-label">Approver 1<i class="asterisco_rojo"></i></label>
+                <div class="col-sm-8">
+                    @if (@Model.state == "Pending to send" || @Model.state == "Rejected")
+                    {
+                        <select class="form-control" id="approver_1" name="approver_1"></select>
+
+                    }
+                    @if (@Model.state != "Pending to send")
+                    {
+                        <select class="form-control" id="approver_1" name="approver_1" readonly disabled></select>
+                    }
+                </div>
+            </div>
+
+            <div class="col-4 form-group row">
+                <label for="approver_2" class="col-sm-4 col-form-label">Approver 2<i class="asterisco_rojo"></i></label>
+                <div class="col-sm-8">
+                    @if (@Model.state == "Pending to send" || @Model.state == "Rejected")
+                    {
+                        <select class="form-control" id="approver_2" name="approver_2"></select>
+
+                    }
+                    @if (@Model.state != "Pending to send")
+                    {
+                        <select class="form-control" id="approver_2" name="approver_2" readonly disabled></select>
+                    }
+                    <!--<input type="text" class="form-control" id="approver_2" name="approver_2" value="joseverdejo100@gmail.com" readonly>-->
+                </div>
+            </div>
+
+            <div class="col-4 form-group row">
+                <label for="approver_3" class="col-sm-4 col-form-label">Approver 3<i class="asterisco_rojo"></i></label>
+                <div class="col-sm-8">
+                    @if (@Model.state == "Pending to send" || @Model.state == "Rejected")
+                    {
+                        <select class="form-control" id="approver_3" name="approver_3"></select>
+
+                    }
+                    @if (@Model.state != "Pending to send")
+                    {
+                        <select class="form-control" id="approver_3" name="approver_3" readonly disabled></select>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="project_name" class="col-sm-1 col-form-label">Project Name<i class="asterisco_rojo"></i></label>
+            <div class="col-sm-11">
+                <input type="text" class="form-control" id="project_name" name="project_name">
+            </div>
+        </div>
+    </form>
+
+
+    <hr style="color: #2742c5;height: 2px;" />
+    <partial name="Alerta" />
+
+    <ul class="nav nav-pills mt-4" id="myTab" role="tablist">
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs active" id="general_information-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#general_information" type="button" role="tab" aria-controls="home" aria-selected="true">
+                General Information
+            </a>
+        </li>
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="nutricional_information-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#nutricional_information" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                Nutritional Information
+            </a>
+        </li>
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="documentation-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#documentation" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                Documentation
+            </a>
+        </li>
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="comments-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#comment-tab" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                Comments
+            </a>
+        </li>
+        <li class="nav-item nav-item-tabs" role="presentation">
+            <a class="nav-link nav-link-tabs" id="cycles-tab" data-toggle="tab" data-bs-toggle="pill" data-bs-target="#cycle-tab" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                Approval Cycle
+            </a>
+        </li>
+    </ul>
+
+    <form id="form_information">
+        <div class="tab-content mb-5 mt-3" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="general_information" role="tabpanel" aria-labelledby="general_information-tab">
+                <partial name="GeneralInformation" />
+            </div>
+            <div class="tab-pane fade" id="nutricional_information" role="tabpanel" aria-labelledby="nutricional_information-tab">
+                <partial name="NutricionalInformation" />
+            </div>
+            <div class="tab-pane fade" id="documentation" role="tabpanel" aria-labelledby="documentation-tab">
+                <partial name="Documentation" />
+            </div>
+            <div class="tab-pane fade" id="comment-tab" role="tabpanel" aria-labelledby="comments-tab">
+                <partial name="Comments" />
+            </div>
+            <div class="tab-pane fade" id="cycle-tab" role="tabpanel" aria-labelledby="cycles-tab">
+                <partial name="ApprovalCycle" />
+            </div>
+        </div>
+    </form>
+
+    <div class="fixed-bottom p-3" style="background-color: #eeeeee;">
+        <div class="row">
+
+            <div class="col-3">
+                <div class="ml-3">
+                    @if (@Model.creator == null || (@Model.state != "Approved" && ((nombre == @Model.creator) || (nombre == @Model.approver_1) || (nombre == @Model.approver_2) || (nombre == @Model.approver_3))) || (perfil == "3" || perfil == "1"))
+                    {
+                        <button id="btn_save_proposal" class="btn btn-warning">Save</button>
+                    }
+
+                    @if ((@Model.state == "Pending to send" || @Model.state == "Rejected") && nombre == @Model.creator)
+                    {
+                        <button id="btn_delete_proposal" class="btn btn-warning">Delete</button>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="col-9">
+                <div class="mr-3" style="float: right;">
+                    @if ((@Model.state == "Pending to send" || @Model.state == "Rejected") && (@Model.creator == nombre || @Model.creator == null))
+                    {
+                        <button id="btn_send_approval" class="btn btn-warning">Send to Approval</button>
+                    }
+
+
+
+                    @if ((perfil == "1" || perfil == "5") && @Model.state == "Pending Approval 1" && nombre == @Model.approver_1)
+                    {
+                        <button id="btn_approve" class="btn btn-warning">Approve</button>
+                        <button id="btn_reject" class="btn btn-warning">Reject</button>
+                    }
+
+                    @if ((perfil == "1" || perfil == "3" || perfil == "5") && @Model.state == "Pending Approval 2" && nombre == @Model.approver_2) //3
+                    {
+                        <button id="btn_approve" class="btn btn-warning">Approve</button>
+                        <button id="btn_reject" class="btn btn-warning">Reject</button>
+                    }
+
+                    @if ((perfil == "1" || perfil == "2" || perfil == "5") && @Model.state == "Pending Approval 3"  && nombre == @Model.approver_3) //2
+                    {
+                        <button id="btn_approve" class="btn btn-warning">Approve</button>
+                        <button id="btn_reject" class="btn btn-warning">Reject</button>
+                    }
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="modal_comment_reject" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Comment Reject</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Enter Comment:</label>
+                    <textarea class="form-control" id="comment_reject" placeholder="Enter comment"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btn_reject_proposal" class="btn btn-danger">Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+<script type="text/javascript">
+    var user="@ViewData["nombre_perfil"].ToString()";
+    modulo_nutricional_information.init();
+    modulo_comments.init();
+    modulo_new_proposal.init("@Model.numero");
+</script>
+}

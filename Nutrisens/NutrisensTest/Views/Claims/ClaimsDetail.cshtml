@@ -1,0 +1,2085 @@
+﻿@using Nutrisens.Data
+@using Nutrisens.Models
+@using Nutrisens.Areas.Identity.Data;
+@using System.Text.Encodings.Web
+
+
+
+@model Nutrisens.Models.Claim
+
+@{
+    string? id = Model.Codigo;
+
+    if (!string.IsNullOrEmpty(id))
+    {
+        ViewData["Title"] = "View Claim";
+    }
+    else
+    {
+        ViewData["Title"] = "New Claim";
+        id = "0";
+    }
+
+
+    string perfil = ViewData["perfil"].ToString();
+    string nivel = ViewData["nivel"].ToString();
+    string seccion = ViewData["seccion"].ToString();
+
+    string mensaje_guardado = "", tipo_mensaje = "", usuario = "";
+
+    usuario = User.Identity.Name;
+
+    if (ViewData["mensaje_guardado"] != null)
+    {
+        mensaje_guardado = ViewData["mensaje_guardado"].ToString();
+    }
+
+    if (ViewData["tipo_mensaje"] != null)
+    {
+        tipo_mensaje = ViewData["tipo_mensaje"].ToString();
+    }
+
+    List<Empresa> listaEmpresas = ViewBag.empresas;
+    List<ApplicationUser> listaUsuarios = ViewBag.usuarios;
+    List<AccionesAE> listaAcciones = ViewBag.acciones;
+
+    // Si el usuario no es administrador, director o gestor y la reclamación no es suya no puede modificar nada
+    if (usuario != Model.UsuarioAlta && perfil != "1" && perfil != "2" && perfil != "3")
+    {
+        nivel = "2";
+    }
+
+    // Si la reclamación está cerrada y el usuario no es administrador, director o gestor no puede modificarse nada
+    if (Model.Estado == 3 && perfil != "1" && perfil != "2" && perfil != "3")
+    {
+        nivel = "2";
+    }
+
+}
+
+
+<partial name="Cargando" />
+
+<partial name="BtnIndex" />
+
+<div class="float-end">
+    <i class="asterisco_rojo"></i> Required Fields
+</div>
+
+<!-- Ventana modal de clientes -->
+<div id="ventana_clientes" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Customers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_grid_clientes">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-end text-white" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal de referencias -->
+<div id="ventana_refs" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>References</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_grid_refs">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning float-end text-white" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para añadir o editar AE -->
+<div id="ventana_editar_AE" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>External Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body" style="height: 600px; min-height: 600px;">
+                <div class="row">
+                    <div class="col-3">
+                        EA Code
+                        <input type="text" class="form-control" id="txt_AE_codigo" readonly placeholder="Generated automatically" />
+                    </div>
+                    <div class="col-3">
+                        Status
+                        <input type="text" class="form-control" id="txt_AE_estado" readonly />
+                        <input type="hidden" class="form-control" id="hidden_AE_estado" />
+                    </div>
+                    <div class="col-6">
+                        Person in charge<i class="asterisco_rojo"></i>
+                        <select id="desp_AE_responsable" class="form-select">
+                            <option value=""> </option>
+                            @foreach (var item in listaUsuarios)
+                            {
+                                <option value="@item.UserName">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-4 mt-2">
+                        Type of action<i class="asterisco_rojo"></i>
+                        <select id="desp_AE_accion" class="form-select">
+                            <option value=""> </option>
+                            @foreach (var item in listaAcciones)
+                            {
+                                <option value="@item.Id">@Html.DisplayFor(modelItem => item.Accion)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3 mt-2">
+                        Deadline<i class="asterisco_rojo"></i>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                            <input type="text" class="form-control fecha" id="txt_AE_fecha_limite" />
+                        </div>
+                    </div>
+                    <div class="col-5 mt-2">
+                        <label>The registration of the external action will be reported to: </label>
+                        <select id="desp_AE_usuarios_informar" class="form-select select2" multiple>
+                            @foreach (var item in listaUsuarios)
+                            {
+                                <option value="@item.Email">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3" id="div_AE_notas">
+                    <div class="col-12">
+                        <strong>Add Note</strong>
+                        <div class="row border border-2 pt-2 pb-2">
+                            <div class="col-8">
+                                Text
+                                <textarea class="form-control obser" rows="3" cols="5" id="txt_AE_nota" maxlength="700"></textarea>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" id="btn_guardar_AE_nota" class="btn btn-success mt-4">Add Note</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <strong>Notes</strong>
+                        <div id="div_grid_AE_notas" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row col-12">
+                    <div class="col-6 text-start">
+                        <button type="button" id="btn_guardar_AE" class="btn btn-success">Save EA</button>
+                        <button type="button" id="btn_cerrar_AE" class="btn btn-info">Close EA</button>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para añadir o editar AI -->
+<div id="ventana_editar_AI" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Internal Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body" style="height: 600px; min-height: 600px;">
+                <div class="row">
+                    <div class="col-3">
+                        IA Code
+                        <input type="text" class="form-control" id="txt_AI_codigo" readonly placeholder="Generated automatically" />
+                    </div>
+                    <div class="col-3">
+                        Status
+                        <input type="text" class="form-control" id="txt_AI_estado" readonly />
+                        <input type="hidden" class="form-control" id="hidden_AI_estado" />
+                    </div>
+                    <div class="col-6">
+                        Person in charge<i class="asterisco_rojo"></i>
+                        <select id="desp_AI_responsable" class="form-select">
+                            <option value=""> </option>
+                            @foreach (var item in listaUsuarios)
+                            {
+                                <option value="@item.UserName">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-3 mt-2">
+                        Deadline<i class="asterisco_rojo"></i>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                            <input type="text" class="form-control fecha" id="txt_AI_fecha_limite" />
+                        </div>
+                    </div>
+                    <div class="col-5 mt-2">
+                        <label>The registration of the external action will be reported to: </label>
+                        <select id="desp_AI_usuarios_informar" class="form-select select2" multiple>
+                            @foreach (var item in listaUsuarios)
+                            {
+                                <option value="@item.Email">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mt-2">
+                            Analysis of the cause<i class="asterisco_rojo"></i>
+                            <textarea class="form-control obser" rows="3" cols="5" id="txt_AI_analisis_causa" maxlength="700"></textarea>
+                        </div>
+                        <div class="col-6 mt-2">
+                            Corrective Action<i class="asterisco_rojo"></i>
+                            <textarea class="form-control obser" rows="3" cols="5" id="txt_AI_accion_correctiva" maxlength="700"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3" id="div_AI_notas">
+                    <div class="col-12">
+                        <strong>Add Note</strong>
+                        <div class="row border border-2 pt-2 pb-2">
+                            <div class="col-8">
+                                Text
+                                <textarea class="form-control obser" rows="3" cols="5" id="txt_AI_nota" maxlength="700"></textarea>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" id="btn_guardar_AI_nota" class="btn btn-success mt-4">Add Note</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <strong>Notes</strong>
+                        <div id="div_grid_AI_notas" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row col-12">
+                    <div class="col-6 text-start">
+                        <button type="button" id="btn_guardar_AI" class="btn btn-success">Save IA</button>
+                        <button type="button" id="btn_cerrar_AI" class="btn btn-info">Close IA</button>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para informar de cierre -->
+<div id="ventana_informar" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <select id="desp_usuarios_informar_ventana" class="form-select select2" multiple>
+                    @foreach (var item in listaUsuarios)
+                    {
+                        <option value="@item.Email">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                    }
+                </select>
+            </div>
+            <div class="modal-footer">
+                <div class="row col-12">
+                    <div class="col-6 text-start">
+                        <button type="button" id="btn_informar_ventana" class="btn btn-success"><i class="fa fa-paper-plane"></i> Send</button>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para informar de cierre AI -->
+<div id="ventana_informar_AI" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <select id="desp_usuarios_informar_ventana_AI" class="form-select select2" multiple>
+                    @foreach (var item in listaUsuarios)
+                    {
+                        <option value="@item.Email">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                    }
+                </select>
+            </div>
+            <div class="modal-footer">
+                <div class="row col-12">
+                    <div class="col-6 text-start">
+                        <button type="button" id="btn_informar_ventana_AI" class="btn btn-success"><i class="fa fa-paper-plane"></i> Send</button>
+                    </div>
+                    <div class="col-6 text-end">
+                        <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+<!-- Ventana modal para introducir una fecha de cierre -->
+<div id="ventana_fecha_cierre" class="modal fade" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Close Claim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-6 mt-2">
+                    Closing Date<i class="asterisco_rojo"></i>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                        <input type="text" class="form-control fecha" id="txt_fecha_cierre" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success float-start text-white" id="btn_cerrar_claim_final">
+                    Close Claim
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  **********  -->
+
+<partial name="Alerta" />
+
+
+<ul class="nav nav-tabs mt-3 bg-light" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="btn_claim-tab" data-bs-toggle="tab" data-bs-target="#claim" type="button" role="tab" aria-controls="claim" aria-selected="true">Claim</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="btn_external-tab" data-bs-toggle="tab" data-bs-target="#external" type="button" role="tab" aria-controls="external" aria-selected="false">External Action</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="btn_internal-tab" data-bs-toggle="tab" data-bs-target="#internal" type="button" role="tab" aria-controls="internal" aria-selected="false">Internal Action</button>
+    </li>
+</ul>
+<div class="tab-content" id="tabs_content">
+    <!-- CONTENIDO PESTAÑA 1 -->
+    <div class="tab-pane fade show active p-4" id="claim" role="tabpanel" aria-labelledby="btn_claim-tab">
+        <form id="form_pestana1" asp-action="ClaimsDetail" asp-controller="Claims" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="Empresa"></label><i class="asterisco_rojo"></i>
+                    <select id="desp_empresas_simple" class="form-select" asp-for="Empresa">
+                        @foreach (var item in listaEmpresas)
+                        {
+                            <option value="@item.Id">@Html.DisplayFor(modelItem => item.NombreEmpresa)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Empresa" class="text-danger"></span>
+                    <input type="hidden" id="hidden_empresa" asp-for="Empresa" />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="Codigo"></label>
+                    <input class="form-control" id="txt_codigo" asp-for="Codigo" readonly placeholder="Generated automatically" />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="EstadoNombre"></label>
+                    <input class="form-control" id="txt_estado" asp-for="EstadoNombre" readonly />
+                    <input type="hidden" id="hidden_estado" asp-for="Estado" />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="EstadoAE"></label>
+                    <input class="form-control" id="txt_estadoAE" asp-for="EstadoAE" readonly />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="EstadoAI"></label>
+                    <input class="form-control" id="txt_estadoAI" asp-for="EstadoAI" readonly />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="CodigoCliente"></label><i class="asterisco_rojo"></i>
+                    <div class="input-group">
+                        <button class="btn btn-secondary btn-info" type="button" id="btn_cliente"><i class="fa fa-search text-white"></i></button>
+                        <input class="form-control" id="txt_cliente" asp-for="CodigoCliente" readonly />
+                    </div>
+                    <span asp-validation-for="CodigoCliente" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-lg-3 col-sm-6">
+                    <label asp-for="NombreCliente"></label>
+                    <input class="form-control" id="txt_nombre_cliente" asp-for="NombreCliente" readonly />
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="NumPedido"></label><i class="asterisco_rojo"></i>
+                    <input class="form-control" id="txt_num_pedido" asp-for="NumPedido" />
+                    <span asp-validation-for="NumPedido" class="text-danger"></span>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <label asp-for="Motivo"></label><i class="asterisco_rojo"></i>
+                    <select class="form-select" id="desp_motivo" asp-for="Motivo">
+                        <option value=""></option>
+                        <option value="Product">Product</option>
+                        <option value="Service">Service</option>
+                    </select>
+                    <span asp-validation-for="Motivo" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="FechaAlta" id="hidden_fecha_alta" />
+            </div>
+            <div class="row mt-3">
+                @if (nivel == "1" && id == "0")
+                {
+                    <div class="col-lg-2 col-sm-2">
+                        <button type="submit" id="btn_continuar" class="btn btn-success nivel1"><i class="fa fa-save me-2"></i>Continue</button>
+                    </div>
+                }
+            </div>
+            @if (id != "0")
+            {
+                <div class="row">
+                    <div class="col-3">
+                        Saved by
+                        <input type="text" class="form-control" asp-for="UsuarioAltaNombre" readonly />
+                    </div>
+                    <div class="col-2">
+                        <label for="txt_fecha_desde">Date</label><i class="asterisco_rojo"></i>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                            <input type="text" class="form-control fecha" asp-for="FechaAlta" id="txt_fecha_alta" />
+                        </div>
+                        <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">
+                        Batches
+                    </div>
+                    <div class="card-body">
+                        <strong>Add Batch</strong>
+                        <div class="row border border-2 pt-2 pb-2">
+                            <div class="col-2">
+                                <label>Reference</label><i class="asterisco_rojo"></i>
+                                <div class="input-group">
+                                    <button class="btn btn-secondary btn-info" type="button" id="btn_referencia"><i class="fa fa-search text-white"></i></button>
+                                    <input class="form-control" id="txt_referencia" readonly />
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <label id="lbl_nombre_ref" class="mt-4"></label>
+                            </div>
+                            <div class="col-2">
+                                <label>Batch Number</label><i class="asterisco_rojo"></i>
+                                <input type="text" id="txt_numero_lote" class="form-control" />
+                            </div>
+                            <div class="col-2">
+                                <label>Quantity</label><i class="asterisco_rojo"></i>
+                                <input type="text" id="txt_cantidad_lote" class="form-control text-end num2decimales" />
+                            </div>
+                            <div class="col-2">
+                                <label>Unit</label><i class="asterisco_rojo"></i>
+                                <input type="text" id="txt_unidad_lote" class="form-control" />
+                            </div>
+                            @if (nivel == "1")
+                            {
+                                <div class="col-2 text-end">
+                                    <button type="button" id="btn_guardar_lote" class="btn btn-success mt-4">Add Batch</button>
+                                </div>
+                            }
+                        </div>
+                        <div class="clearfix"></div>
+                        <div id="div_grid_lotes" class="mt-3"></div>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">
+                        Notes
+                    </div>
+                    <div class="card-body">
+                        <strong>Add Note</strong>
+                        <div class="row border border-2 pt-2 pb-2">
+                            <div class="col-6">
+                                Text<i class="asterisco_rojo"></i>
+                                <textarea class="form-control obser" rows="3" cols="5" id="txt_nota" maxlength="700"></textarea>
+                            </div>
+                            @if (nivel == "1")
+                            {
+                                <div class="col-2">
+                                    <button type="button" id="btn_guardar_nota" class="btn btn-success mt-4">Add Note</button>
+                                </div>
+                            }
+                        </div>
+                        <div class="clearfix"></div>
+                        <div id="div_grid_notas" class="mt-3"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-4 col-sm-6 mt-3">
+                    <label>The registration of the claim will be reported to: </label>
+                    <select id="desp_usuarios_informar" class="form-select select2" multiple asp-for="ListaUsuariosInformar">
+                        @foreach (var item in listaUsuarios)
+                        {
+                            <option value="@item.Email">@Html.DisplayFor(modelItem => item.NombreCompleto)</option>
+                        }
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+            }
+            @if ((perfil == "1" || perfil == "3" || usuario == Model.UsuarioAlta) && id != "0" && nivel == "1")
+            {
+                <div class="float-start mt-3">
+                    <button type="submit" id="btn_guardar" class="btn btn-success btn-lg nivel1"><i class="fa fa-save me-2"></i>Save</button>
+                </div>
+            }
+            @if ((perfil == "1" || perfil == "3") && id != "0" && Model.Estado == 1)
+            {
+                <div class="float-end mt-3">
+                    <button type="button" id="btn_cerrar_claim" class="btn btn-info btn-lg nivel1">Close Claim</button>
+                </div>
+            }
+            <div class="clearfix"></div>
+        </form>
+    </div>
+    <!-- ********************** -->
+    <!-- CONTENIDO PESTAÑA 2 -->
+    <div class="tab-pane fade p-4" id="external" role="tabpanel" aria-labelledby="btn_external-tab">
+        <div class="row">
+            <div class="col-2">
+                <strong>Claim Code: </strong><label id="lbl_AE_codigo_claim"></label>
+            </div>
+            <div class="col-3">
+                <strong>Customer: </strong><label id="lbl_AE_cliente"></label>
+            </div>
+            <div class="col-2">
+                <strong>Order Number: </strong><label id="lbl_AE_num_pedido"></label>
+            </div>
+            @if (nivel == "1" && Model.Estado == 1)
+            {
+                <div class="col-5 float-end text-end">
+                    <button type="button" id="btn_nueva_AE" class="btn btn-info"><i class="fa fa-plus"></i> New External Action</button>
+                </div>
+            }
+        </div>
+        <hr />
+        <div class="row mt-3" id="div_grid_lista_AE">
+        </div>
+    </div>
+    <!-- ********************** -->
+    <!-- CONTENIDO PESTAÑA 3 -->
+    <div class="tab-pane fade p-4" id="internal" role="tabpanel" aria-labelledby="btn_internal-tab">
+        <div class="row">
+            <div class="col-2">
+                <strong>Claim Code: </strong><label id="lbl_AI_codigo_claim"></label>
+            </div>
+            <div class="col-3">
+                <strong>Customer: </strong><label id="lbl_AI_cliente"></label>
+            </div>
+            <div class="col-2">
+                <strong>Order Number: </strong><label id="lbl_AI_num_pedido"></label>
+            </div>
+            @if (nivel == "1" && Model.Estado == 1)
+            {
+                <div class="col-5 float-end text-end">
+                    <button type="button" id="btn_nueva_AI" class="btn btn-info"><i class="fa fa-plus"></i> New Internal Action</button>
+                </div>
+            }
+        </div>
+        <hr />
+        <div class="row mt-3" id="div_grid_lista_AI">
+        </div>
+    </div>
+    <!-- ********************** -->
+</div>
+
+
+@section Scripts {
+
+<partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+
+    var idClaim, mensaje_guardado, tipo_mensaje;
+
+    mensaje_guardado = '@mensaje_guardado';
+    tipo_mensaje = '@tipo_mensaje';
+
+    $(document).ready(function () {
+        // Obtenemos los parámetros de la url
+        //var parametrosUrl = new URLSearchParams(window.location.search);
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        var posicion = $("#btn_claim-tab").offset();
+        $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+        idClaim = '@id';
+
+        if (idClaim != "" && idClaim != null && idClaim != '0') {
+            $('#btn_external-tab').removeClass('disabled');
+            $('#btn_internal-tab').removeClass('disabled');
+
+            // Deshabilitamos el desplegable de empresa, ya que si se ha metido cliente o referencias no coincidirían
+            // Ojo, cuando se pone disabled un elemento no se puede usar su valor para POST, por eso he incluido un hidden.
+            // A la hora de guardar coger el valor de ese hidden en lugar del select
+            $("#desp_empresas_simple").prop("disabled", true);
+        } else {
+            $('#btn_external-tab').addClass('disabled');
+            $('#btn_internal-tab').addClass('disabled');
+        }
+
+        if (mensaje_guardado != null && mensaje_guardado != "") {
+            if (tipo_mensaje != null && tipo_mensaje != "") {
+                if (tipo_mensaje == "success") {
+                    MostrarOk("#alerta", '@mensaje_guardado');
+                }
+
+                if (tipo_mensaje == "danger") {
+                    MostrarError("#alerta", '@mensaje_guardado');
+                }
+            }
+        }
+
+        ObtenerLotes();
+
+        ObtenerNotas();
+
+        var codigo_claim = $('#txt_codigo').val();
+        var nombre_cliente = $('#txt_nombre_cliente').val();
+        var num_pedido = $('#txt_num_pedido').val();
+
+        $('#lbl_AE_codigo_claim').text(codigo_claim);
+        $('#lbl_AE_cliente').text(nombre_cliente);
+        $('#lbl_AE_num_pedido').text(num_pedido);
+
+        $('#lbl_AI_codigo_claim').text(codigo_claim);
+        $('#lbl_AI_cliente').text(nombre_cliente);
+        $('#lbl_AI_num_pedido').text(num_pedido);
+
+        // Este select2 hay que hacerlo así porque al estar dentro de un modal no funciona bien con Boostrap 5
+        $('#desp_AE_responsable').select2({
+            dropdownParent: $('#ventana_editar_AE'),
+            theme: "bootstrap-5",
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            closeOnSelect: true
+        });
+
+    });
+
+    /*********** FUNCIONES DE LA PESTAÑA 1 ************************/
+
+    $(document).on('click', '#btn_cliente', function (e) {
+        e.preventDefault();
+
+        ObtenerClientes();
+    });
+
+    $(document).on('click', '#btn_referencia', function (e) {
+        e.preventDefault();
+
+        ObtenerReferencias();
+    });
+
+    // Al cambiar el desplegable de empresa hay que quitar el cliente seleccionado
+    $(document).on('change', '#desp_empresas_simple', function (e) {
+        e.preventDefault();
+
+        $('#txt_cliente').val('');
+        $('#txt_nombre_cliente').val('');
+    });
+
+    // Función para obtener por ajax la lista de clientes
+    ObtenerClientes = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerClientes", "Claims")",
+            data: {
+                empresa: $("#desp_empresas_simple").val()
+            },
+            type: "POST",
+            cache: false
+        })
+            .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_clientes").html(result);
+
+                    scripts.init();
+                }
+
+                AbrirModal("#ventana_clientes");
+            })
+            .fail(function (xhr, status, error) {
+                MostrarError("#alerta", xhr.responseText);
+
+            })
+            .always(function () {
+                $("#AjaxLoader").hide();
+            });
+    }
+
+    // Al seleccionar una fila de la tabla de clientes
+    $(document).on('click', '.seleccionar_cliente', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var fila = $(this).closest("tr");
+
+        var codigo = fila.find(".codigo_cliente").text();
+        var nombre = fila.find(".nombre_cliente").text();
+
+        codigo = $.trim(codigo);
+        nombre = $.trim(nombre);
+
+        $("#txt_cliente").val(codigo);
+        $("#txt_nombre_cliente").val(nombre);
+
+        CerrarModal();
+
+        $("#AjaxLoader").hide();
+
+    });
+
+
+    // Función para obtener por ajax la lista de referencias
+    ObtenerReferencias = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerReferencias", "Claims")",
+            data: {
+                empresa: $("#desp_empresas_simple").val()
+            },
+            type: "POST",
+            cache: false
+        })
+            .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_refs").html(result);
+
+                    scripts.init();
+                }
+
+                AbrirModal("#ventana_refs");
+            })
+            .fail(function (xhr, status, error) {
+                MostrarError("#alerta", xhr.responseText);
+
+            })
+            .always(function () {
+                $("#AjaxLoader").hide();
+            });
+    }
+
+    // Al seleccionar una fila de la tabla de referencias
+    $(document).on('click', '.seleccionar_ref', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var fila = $(this).closest("tr");
+
+        var codigo = fila.find(".codigo_ref").text();
+        var nombre = fila.find(".nombre_ref").text();
+
+        codigo = $.trim(codigo);
+        nombre = $.trim(nombre);
+
+        $("#txt_referencia").val(codigo);
+        $("#lbl_nombre_ref").text(nombre);
+
+        CerrarModal();
+
+        $("#AjaxLoader").hide();
+
+    });
+
+    $(document).on('click', '#btn_guardar_lote', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_lote").offset();
+        $("#alerta").css({ left: posicion.left - 80, top: posicion.top - 40 });
+
+        let codigo_ref = $('#txt_referencia').val();
+        let numero_lote = $('#txt_numero_lote').val();
+        let cantidad = $('#txt_cantidad_lote').val();
+        let unidad = $('#txt_unidad_lote').val();
+        let codigo = $('#txt_codigo').val();
+
+        if (codigo_ref == '' || numero_lote == '' || cantidad == '' || unidad == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarLote", "Claims")",
+                data: {
+                    codigo: codigo,
+                    codigo_ref: codigo_ref,
+                    numero_lote: numero_lote,
+                    cantidad: cantidad,
+                    unidad: unidad
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if (result != null) {
+                        if (result.includes("Error")) {
+                            MostrarError("#alerta", result);
+                        } else {
+                            MostrarOk("#alerta", result);
+
+                            $('#txt_referencia').val('');
+                            $('#lbl_nombre_ref').text('');
+                            $('#txt_numero_lote').val('');
+                            $('#txt_cantidad_lote').val('');
+                            $('#txt_unidad_lote').val('');
+
+                            ObtenerLotes();
+                        }
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+    ObtenerLotes = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerLotes", "Claims")",
+            data: {
+                codigo: $("#txt_codigo").val(),
+                nivel: @nivel
+        },
+        type: "POST",
+            cache: false
+                })
+                    .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_lotes").html(result);
+
+                    scripts.init();
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+            }
+
+    // Eliminar Lote
+    $(document).on('click', '.btn_eliminar_lote', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the batch?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_lote").offset();
+            $("#alerta").css({ left: posicion.left - 80, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var codigo_ref = fila.find(".CodigoRef").text();
+            var numero_lote = fila.find(".NumeroLote").text();
+            var codigo = $("#txt_codigo").val();
+
+            codigo_ref = $.trim(codigo_ref);
+            numero_lote = $.trim(numero_lote);
+
+            $.ajax({
+                url: "@Url.Action("EliminarLote", "Claims")",
+                data: {
+                    codigo_ref: codigo_ref,
+                    codigo: codigo,
+                    numero_lote: numero_lote
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerLotes();
+                    MostrarOk("#alerta", "Batch deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    ObtenerNotas = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerNotas", "Claims")",
+            data: {
+                codigo: $("#txt_codigo").val(),
+                nivel: @nivel
+        },
+        type: "POST",
+            cache: false
+                })
+                    .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_notas").html(result);
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+     }
+
+    $(document).on('click', '#btn_guardar_nota', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_nota").offset();
+        $("#alerta").css({ left: posicion.left - 80, top: posicion.top - 40 });
+
+        let codigo = $('#txt_codigo').val();
+        let nota = $('#txt_nota').val();
+
+        if (nota == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarNota", "Claims")",
+                data: {
+                    codigo: codigo,
+                    nota: nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if (result != null) {
+                        if (result.includes("Error")) {
+                            MostrarError("#alerta", result);
+                        } else {
+                            MostrarOk("#alerta", result);
+
+                            $('#txt_nota').val('');
+
+                            ObtenerNotas();
+                        }
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+    // Eliminar Nota
+    $(document).on('click', '.btn_eliminar_nota', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the note?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_nota").offset();
+            $("#alerta").css({ left: posicion.left - 80, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var id_nota = fila.find(".id_nota").val();
+
+            id_nota = $.trim(id_nota);
+
+            $.ajax({
+                url: "@Url.Action("EliminarNota", "Claims")",
+                data: {
+                    id: id_nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerNotas();
+                    MostrarOk("#alerta", "Note deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    // Submit del formulario al guardar
+    $(document).on('click', '#btn_guardar', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        // Validar que haya al menos un lote y una nota
+        var num_filas_lotes = $('#grid_lotes tr').length;
+        var num_filas_notas = $('#grid_notas tr').length;
+
+        // Debe ser mayor que 1 porque la del header la cuenta como fila
+        if (num_filas_lotes > 1 && num_filas_notas > 1) {
+            if ($("#desp_usuarios_informar").val() == "") /*&& $("#txt_estado").val()=="Draft"*/// Lo pongo si me solicitan que sólo salte esta validación la primera vez
+            {
+                if (confirm("No one will be informed of the registration of the claim, do you want to continue?")) {
+                    $("#form_pestana1").submit();
+                }
+            }
+            else {
+                $("#form_pestana1").submit();
+            }
+        }
+        else {
+            var posicion = $("#btn_guardar").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+            MostrarError("#alerta", "You have to add at least a Batch and a Note to the Claim ");
+        }
+
+        $("#AjaxLoader").hide();
+    });
+
+    // Cerrar Claim
+    $(document).on('click', '#btn_cerrar_claim', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to Close the Claim?")) {
+
+            var date = new Date();
+            date.setDate(date. getDate());
+
+            var dd = String(date.getDate()).padStart(2, '0');
+            var mm = String(date.getMonth() + 1).padStart(2, '0');
+            var yyyy = date.getFullYear();
+
+           $('#txt_fecha_cierre').val(dd + '-' + mm + '-' + yyyy);
+
+            AbrirModal('#ventana_fecha_cierre');
+        }
+    });
+
+    $(document).on('click', '#btn_cerrar_claim_final', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+            var posicion = $("#btn_cerrar_claim_final").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var codigo = $('#txt_codigo').val();
+            var fecha_cierre = $('#txt_fecha_cierre').val();
+
+            fecha_cierre = $.trim(fecha_cierre);
+
+            if(fecha_cierre!=''){
+                $.ajax({
+                url: "@Url.Action("CerrarClaim", "Claims")",
+                data: {
+                    codigo: codigo,
+                    fecha_cierre: fecha_cierre
+                },
+                type: "POST",
+                cache: false
+                })
+
+                .done(function (result) {
+                    if(result!=null){
+                        MostrarOk("#alerta", result);
+
+                        $('#txt_estado').val("Closed");
+                        $('#hidden_estado').val("2");
+                        $("#btn_cerrar_claim").hide();
+
+                        CerrarModal();
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+            }   else{
+                 $("#AjaxLoader").hide();
+                MostrarError("#alerta", "You must fill in the required fields");
+            }
+    });
+
+    $(document).on('click', '#btn_claim-tab', function (e) {
+
+        $("#AjaxLoader").show();
+
+        window.location.replace("ClaimsDetail?codigo=@id");
+    });
+
+    /**************************************/
+
+
+
+    /*********** FUNCIONES DE LA PESTAÑA 2 ************************/
+
+    $(document).on('click', '#btn_external-tab', function (e) {
+
+        ObtenerListaAE();
+    });
+
+    ObtenerListaAE = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerListaAE", "Claims")",
+            data: {
+                codigo: $("#txt_codigo").val(),
+                nivel: @nivel,
+        perfil: @perfil
+         },
+        type: "POST",
+            cache: false
+                })
+                    .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_lista_AE").html(result);
+
+                    scripts.init();
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    $(document).on('click', '#btn_nueva_AE', function (e) {
+       e.preventDefault();
+
+       $('#txt_AE_estado').val('Open');
+       $('#hidden_AE_estado').val('1');
+
+       $('#desp_AE_responsable').val('');
+       $('#desp_AE_responsable').trigger('change'); // Para que cambie el valor del select2
+
+       $('#desp_AE_accion').val('0');
+
+        $('#div_AE_notas').hide();
+
+        $('#btn_cerrar_AE').hide();
+
+        var date = new Date();
+        date.setDate(date. getDate() + 2);
+
+        var dd = String(date.getDate()).padStart(2, '0');
+        var mm = String(date.getMonth() + 1).padStart(2, '0');
+        var yyyy = date.getFullYear();
+
+       $('#txt_AE_fecha_limite').val(dd + '-' + mm + '-' + yyyy);
+
+        AbrirModal("#ventana_editar_AE");
+    });
+
+    $(document).on('click', '#btn_guardar_AE', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_AE").offset();
+        $("#alerta").css({ left: posicion.left, top: posicion.top});
+
+        var responsable = $('#desp_AE_responsable').find(':selected').val(); // Al ser un Select2 hay que obtener el objet seleccionado así
+        var accion = $('#desp_AE_accion').val();
+        var fecha_limite = $('#txt_AE_fecha_limite').val();
+        var codigo = $('#lbl_AE_codigo_claim').text();
+        var codigoAE = $('#txt_AE_codigo').val();
+        var usuarios_informar = $('#desp_AE_usuarios_informar').val();
+
+        if (responsable == '' || accion == '' || fecha_limite == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarAE", "Claims")",
+                data: {
+                    codigo: codigo,
+                    responsable: responsable,
+                    fecha_limite: fecha_limite,
+                    accion: accion,
+                    codigoAE: codigoAE,
+                    usuarios_informar: usuarios_informar
+                },
+                type: "POST",
+                cache: false,
+                dataType: "html"
+            })
+                .done(function (result) {
+                    if (result != null) {
+
+                        var json = $.parseJSON(result);
+
+                        if (json.mensaje.includes("Error")) {
+                            MostrarError("#alerta", json.mensaje);
+                        } else {
+                            MostrarOk("#alerta", json.mensaje);
+
+                            $("#txt_AE_codigo").val(json.codigo_AE);
+
+                            $("#desp_AE_usuarios_informar").val('').trigger('change');
+
+                            $('#div_AE_notas').show();
+                        }
+                    }
+
+                    ObtenerListaAE();
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+
+    $(document).on('click', '.btn_eliminar_AE', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the External Action?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_external-tab").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var codigoAE = fila.find(".CodigoAE").text();
+
+            codigoAE = $.trim(codigoAE);
+
+            $.ajax({
+                url: "@Url.Action("EliminarAE", "Claims")",
+                data: {
+                    codigoAE: codigoAE
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerListaAE();
+                    MostrarOk("#alerta", "External Action deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '.btn_editar_AE', function (e) {
+        e.preventDefault();
+
+        $('#txt_AE_nota').val('');
+
+        $('#div_AE_notas').show();
+
+        $('#desp_AE_usuarios_informar').val('');
+        $('#desp_AE_usuarios_informar').trigger('change');
+
+        AbrirModal('#ventana_editar_AE');
+
+        var fila = $(this).closest("tr");
+
+        var codigoAE = fila.find(".CodigoAE").text();
+
+        codigoAE = $.trim(codigoAE);
+
+        ObtenerAE(codigoAE);
+
+        ObtenerNotasAE(codigoAE);
+
+        var estado = $('#hidden_AE_estado').val();
+
+        if(estado == "1" && ( '@usuario' == $('#desp_AE_responsable').val() || '@perfil' == '1' || '@perfil' == '2' || '@perfil' == '3'))
+        {
+            $('#btn_cerrar_AE').show();
+            $('#btn_guardar_AE').show();
+        }else{
+            $('#btn_cerrar_AE').hide();
+            $('#btn_guardar_AE').hide();
+        }
+    });
+
+    ObtenerAE = function (codigoAE) {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerAE", "Claims")",
+            data: {
+                codigoAE: codigoAE
+            },
+        type: "POST",
+        cache: false,
+        async: false
+                })
+         .done(function (result) {
+                if (result != null) {
+                    $('#txt_AE_codigo').val(result.CodigoAE);
+                    $('#txt_AE_estado').val(result.NombreEstado);
+                    $('#hidden_AE_estado').val(result.EstadoAE);
+                    $('#desp_AE_responsable').val(result.Responsable);
+                    $('#desp_AE_responsable').trigger('change'); // Para que cambie el valor del select2
+                    $('#desp_AE_accion').val(result.Accion);
+                    $('#txt_AE_fecha_limite').val(result.FechaLimite);
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    ObtenerNotasAE = function (codigoAE) {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerNotasAE", "Claims")",
+            data: {
+                codigoAE: codigoAE,
+                nivel: @nivel
+        },
+        type: "POST",
+            cache: false,
+            async: false
+                })
+          .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_AE_notas").html(result);
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    $(document).on('click', '#btn_guardar_AE_nota', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_AE_nota").offset();
+        $("#alerta").css({ left: posicion.left, top: posicion.top});
+
+        let codigo = $('#txt_AE_codigo').val();
+        let nota = $('#txt_AE_nota').val();
+
+        if (nota == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarNotaAE", "Claims")",
+                data: {
+                    codigo: codigo,
+                    nota: nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if (result != null) {
+                        if (result.includes("Error")) {
+                            MostrarError("#alerta", result);
+                        } else {
+                            MostrarOk("#alerta", result);
+
+                            $('#txt_AE_nota').val('');
+
+                            ObtenerNotasAE(codigo);
+                        }
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+    $(document).on('click', '.btn_AE_eliminar_nota', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the note?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_AE_nota").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var id_nota = fila.find(".id_nota").val();
+
+            id_nota = $.trim(id_nota);
+
+            $.ajax({
+                url: "@Url.Action("EliminarNotaAE", "Claims")",
+                data: {
+                    id: id_nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerNotasAE($('#txt_AE_codigo').val());
+                    MostrarOk("#alerta", "Note deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '#btn_cerrar_AE', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to Close the External Action?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_AE").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var codigoAE = $('#txt_AE_codigo').val();
+
+            $.ajax({
+                url: "@Url.Action("CerrarAE", "Claims")",
+                data: {
+                    codigoAE: codigoAE
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerAE(codigoAE);
+                    $('#btn_cerrar_AE').hide();
+                    MostrarOk("#alerta", "External Action closed succesfully");
+                    ObtenerListaAE();
+                    if(confirm('Do you want to inform someone that the External Action has been closed?'))
+                    {
+                        AbrirModal('#ventana_informar');
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '#btn_informar_ventana', function (e) {
+        e.preventDefault();
+
+           $("#AjaxLoader").show();
+
+            var posicion = $("#btn_informar_ventana").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var usuarios_informar = $('#desp_usuarios_informar_ventana').val();
+            var codigoAE = $('#txt_AE_codigo').val();
+            var codigo = $('#txt_codigo').val();
+
+            $.ajax({
+                url: "@Url.Action("InformarUsuarios", "Claims")",
+                data: {
+                    usuarios_informar: usuarios_informar,
+                    codigo: codigo,
+                    codigo_AE: codigoAE
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if(result!=null){
+                        MostrarOk("#alerta", result);
+
+                        CerrarVentana('#ventana_informar');
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+    });
+
+    /**************************************/
+
+    /*********** FUNCIONES DE LA PESTAÑA 3 ************************/
+    $(document).on('click', '#btn_internal-tab', function (e) {
+
+        ObtenerListaAI();
+    });
+
+    ObtenerListaAI = function () {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerListaAI", "Claims")",
+            data: {
+                codigo: $("#txt_codigo").val(),
+                nivel: @nivel,
+        perfil: @perfil
+         },
+        type: "POST",
+            cache: false
+                })
+                    .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_lista_AI").html(result);
+
+                    scripts.init();
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    $(document).on('click', '#btn_nueva_AI', function (e) {
+       e.preventDefault();
+
+       $('#txt_AI_estado').val('Open');
+       $('#hidden_AI_estado').val('1');
+
+       $('#desp_AI_responsable').val('');
+       $('#desp_AI_responsable').trigger('change'); // Para que cambie el valor del select2
+
+       $('#desp_AI_accion').val('0');
+
+        $('#div_AI_notas').hide();
+
+        $('#btn_cerrar_AI').hide();
+
+        var date = new Date();
+        date.setDate(date. getDate() + 2);
+
+        var dd = String(date.getDate()).padStart(2, '0');
+        var mm = String(date.getMonth() + 1).padStart(2, '0');
+        var yyyy = date.getFullYear();
+
+       $('#txt_AI_fecha_limite').val(dd + '-' + mm + '-' + yyyy);
+
+       $('#txt_AI_analisis_causa').val('');
+       $('#txt_AI_accion_correctiva').val('');
+
+        AbrirModal("#ventana_editar_AI");
+    });
+
+    $(document).on('click', '#btn_guardar_AI', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_AI").offset();
+        $("#alerta").css({ left: posicion.left, top: posicion.top});
+
+        var responsable = $('#desp_AI_responsable').find(':selected').val(); // Al ser un Select2 hay que obtener el objet seleccionado así
+
+        // Falta incluir aquí los campos de la AI de análisis de causas y tal
+        var fecha_limite = $('#txt_AI_fecha_limite').val();
+        var codigo = $('#lbl_AI_codigo_claim').text();
+        var codigoAI = $('#txt_AI_codigo').val();
+        var usuarios_informar = $('#desp_AI_usuarios_informar').val();
+        var analisis_causa = $('#txt_AI_analisis_causa').val();
+        var accion_correctiva = $('#txt_AI_accion_correctiva').val();
+
+
+        if (responsable == '' || fecha_limite == '' || analisis_causa == '' || accion_correctiva == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarAI", "Claims")",
+                data: {
+                    codigo: codigo,
+                    responsable: responsable,
+                    fecha_limite: fecha_limite,
+                    codigoAI: codigoAI,
+                    usuarios_informar: usuarios_informar,
+                    analisis_causa: analisis_causa,
+                    accion_correctiva: accion_correctiva
+                },
+                type: "POST",
+                cache: false,
+                dataType: "html"
+            })
+                .done(function (result) {
+                    if (result != null) {
+
+                        var json = $.parseJSON(result);
+
+                        if (json.mensaje.includes("Error")) {
+                            MostrarError("#alerta", json.mensaje);
+                        } else {
+                            MostrarOk("#alerta", json.mensaje);
+
+                            $("#txt_AI_codigo").val(json.codigo_AI);
+
+                            $("#desp_AI_usuarios_informar").val('').trigger('change');
+
+                            $('#div_AI_notas').show();
+                        }
+                    }
+
+                    ObtenerListaAI();
+                })
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+
+    $(document).on('click', '.btn_eliminar_AI', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the Internal Action?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_internal-tab").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var codigoAI = fila.find(".CodigoAI").text();
+
+            codigoAI = $.trim(codigoAI);
+
+            $.ajax({
+                url: "@Url.Action("EliminarAI", "Claims")",
+                data: {
+                    codigoAI: codigoAI
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerListaAI();
+                    MostrarOk("#alerta", "Internal Action deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '.btn_editar_AI', function (e) {
+        e.preventDefault();
+
+        $('#txt_AI_nota').val('');
+
+        $('#div_AI_notas').show();
+
+        $('#desp_AI_usuarios_informar').val('');
+        $('#desp_AI_usuarios_informar').trigger('change');
+
+        AbrirModal('#ventana_editar_AI');
+
+        var fila = $(this).closest("tr");
+
+        var codigoAI = fila.find(".CodigoAI").text();
+
+        codigoAI = $.trim(codigoAI);
+
+        ObtenerAI(codigoAI);
+
+        ObtenerNotasAI(codigoAI);
+
+        var estado = $('#hidden_AI_estado').val();
+
+        if(estado == "1" && ( '@usuario' == $('#desp_AI_responsable').val() || '@perfil' == '1' || '@perfil' == '2' || '@perfil' == '3'))
+        {
+            $('#btn_cerrar_AI').show();
+            $('#btn_guardar_AI').show();
+        }else{
+            $('#btn_cerrar_AI').hide();
+            $('#btn_guardar_AI').hide();
+        }
+    });
+
+    ObtenerAI = function (codigoAI) {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerAI", "Claims")",
+            data: {
+                codigoAI: codigoAI
+            },
+        type: "POST",
+        cache: false,
+        async: false
+                })
+         .done(function (result) {
+                if (result != null) {
+                    $('#txt_AI_codigo').val(result.CodigoAI);
+                    $('#txt_AI_estado').val(result.NombreEstado);
+                    $('#hidden_AI_estado').val(result.EstadoAI);
+                    // Añadir los campos de la AI de análisis de causas y tal
+                    $('#desp_AI_responsable').val(result.Responsable);
+                    $('#desp_AI_responsable').trigger('change'); // Para que cambie el valor del select2
+                    $('#txt_AI_accion_correctiva').val(result.AccionCorrectiva);
+                    $('#txt_AI_analisis_causa').val(result.AnalisisCausa);
+
+                    $('#txt_AI_fecha_limite').val(result.FechaLimite);
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    ObtenerNotasAI = function (codigoAI) {
+        $("#AjaxLoader").show();
+
+        $.ajax({
+            url: "@Url.Action("ObtenerNotasAI", "Claims")",
+            data: {
+                codigoAI: codigoAI,
+                nivel: @nivel
+        },
+        type: "POST",
+            cache: false,
+            async: false
+                })
+          .done(function (result) {
+                if (result != null) {
+                    $("#div_grid_AI_notas").html(result);
+                }
+            })
+        .fail(function (xhr, status, error) {
+            MostrarError("#alerta", xhr.responseText);
+
+        })
+        .always(function () {
+            $("#AjaxLoader").hide();
+        });
+    }
+
+    $(document).on('click', '#btn_guardar_AI_nota', function (e) {
+        e.preventDefault();
+
+        $("#AjaxLoader").show();
+
+        var posicion = $("#btn_guardar_AI_nota").offset();
+        $("#alerta").css({ left: posicion.left, top: posicion.top});
+
+        let codigo = $('#txt_AI_codigo').val();
+        let nota = $('#txt_AI_nota').val();
+
+        if (nota == '') {
+            MostrarError("#alerta", "You must fill in the required fields");
+            $("#AjaxLoader").hide();
+        } else {
+
+            $.ajax({
+                url: "@Url.Action("GuardarNotaAI", "Claims")",
+                data: {
+                    codigo: codigo,
+                    nota: nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if (result != null) {
+                        if (result.includes("Error")) {
+                            MostrarError("#alerta", result);
+                        } else {
+                            MostrarOk("#alerta", result);
+
+                            $('#txt_AI_nota').val('');
+
+                            ObtenerNotasAI(codigo);
+                        }
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+
+    });
+
+    $(document).on('click', '.btn_AI_eliminar_nota', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to delete the note?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_AI_nota").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var fila = $(this).closest("tr");
+
+            var id_nota = fila.find(".id_nota").val();
+
+            id_nota = $.trim(id_nota);
+
+            $.ajax({
+                url: "@Url.Action("EliminarNotaAI", "Claims")",
+                data: {
+                    id: id_nota
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerNotasAI($('#txt_AI_codigo').val());
+                    MostrarOk("#alerta", "Note deleted succesfully");
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '#btn_cerrar_AI', function (e) {
+        e.preventDefault();
+
+        if (confirm("Are you sure you want to Close the Internal Action?")) {
+            $("#AjaxLoader").show();
+
+            var posicion = $("#btn_guardar_AI").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var codigoAI = $('#txt_AI_codigo').val();
+
+            $.ajax({
+                url: "@Url.Action("CerrarAI", "Claims")",
+                data: {
+                    codigoAI: codigoAI
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    ObtenerAI(codigoAI);
+                    $('#btn_cerrar_AI').hide();
+                    MostrarOk("#alerta", "Internal Action closed succesfully");
+                    ObtenerListaAI();
+                    if(confirm('Do you want to inform someone that the Internal Action has been closed?'))
+                    {
+                        AbrirModal('#ventana_informar_AI');
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+
+        }
+    });
+
+    $(document).on('click', '#btn_informar_ventana_AI', function (e) {
+        e.preventDefault();
+
+           $("#AjaxLoader").show();
+
+            var posicion = $("#btn_informar_ventana_AI").offset();
+            $("#alerta").css({ left: posicion.left, top: posicion.top });
+
+            var usuarios_informar = $('#desp_usuarios_informar_ventana_AI').val();
+            var codigoAI = $('#txt_AI_codigo').val();
+            var codigo = $('#txt_codigo').val();
+
+            $.ajax({
+                url: "@Url.Action("InformarUsuariosAI", "Claims")",
+                data: {
+                    usuarios_informar: usuarios_informar,
+                    codigo: codigo,
+                    codigo_AI: codigoAI
+                },
+                type: "POST",
+                cache: false
+            })
+
+                .done(function (result) {
+                    if(result!=null){
+                        MostrarOk("#alerta", result);
+
+                        CerrarVentana('#ventana_informar_AI');
+                    }
+                })
+
+                .fail(function (xhr, status, error) {
+                    MostrarError("#alerta", xhr.responseText);
+                })
+                .always(function () {
+                    $("#AjaxLoader").hide();
+                });
+    });
+
+    /**************************************/
+
+</script>
+
+}
+

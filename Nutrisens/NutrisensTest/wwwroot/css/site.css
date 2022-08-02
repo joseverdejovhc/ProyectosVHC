@@ -1,0 +1,334 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-bottom: 60px;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+    a:active {
+        color: #000000;
+        text-decoration: none
+    }
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+
+.pastilla-index {
+    min-height: 100px;
+}
+
+a.enlace-index {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+a.enlace-oscuro {
+    text-decoration: none;
+    color: black;
+}
+
+    a.enlace-oscuro:hover {
+        text-decoration: none;
+        color: dimgrey;
+    }
+
+
+.card-hover:hover {
+    border: 1px solid #888;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 0 20px #AAA;
+}
+
+/* Capa para el fondo semitransparente de la imagen del Cargando */
+.divCargando {
+    /*position: absolute;
+    z-index: 2000;
+    top: 50%;
+    left: 50%;
+    text-align: center;*/
+    position: fixed;
+    display: block;
+    z-index: 2000;
+    width: 100%;
+    top: 300px;
+    left: 0;
+    text-align: center;
+    height: 100%;
+}
+
+
+.divCargando_ventanaCompleta {
+    position: fixed;
+    z-index: 1999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    background-color: #fff;
+    opacity: 0.5;
+}
+
+
+.asterisco_rojo:after {
+    content: "*";
+    font-weight: bold;
+    color: red;
+}
+
+.modal-header {
+    cursor: move;
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #0080a0; /* Azul del logo Nutrisens */
+    -webkit-border-top-left-radius: 2px;
+    -webkit-border-top-right-radius: 2px;
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-topright: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    color: white;
+}
+
+.modal .modal-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: skyblue;
+}
+
+.seleccionar {
+    cursor: pointer;
+}
+
+
+.rojo {
+    color: red;
+}
+
+.rojo_nutrisens {
+    color: #e31928;
+}
+
+.obser {
+    resize: none;
+}
+
+
+/**** TOOLTIP QUE UTILIZO PARA LAS AYUDAS *****/
+
+.toolt {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    background-color: orange;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: help;
+    font-family: Arial;
+}
+
+    .toolt:before {
+        content: '?';
+        font-family: Arial;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .toolt .tiptext {
+        visibility: hidden;
+        width: 400px;
+        font-size: 12px;
+        background-color: black;
+        color: #ddd;
+        text-align: left;
+        border-radius: 4px;
+        padding: 6px;
+        position: absolute;
+        font-size: 14px;
+        z-index: 1;
+    }
+
+        .toolt .tiptext::after {
+            content: "";
+            position: absolute;
+            border-width: 5px;
+            border-style: solid;
+        }
+
+    .toolt:hover .tiptext {
+        visibility: visible;
+    }
+
+
+    /**Tooltip arriba derecha*/
+    .toolt.top .tiptext {
+        margin-left: -3px;
+        bottom: 150%;
+        left: 2%;
+    }
+
+        .toolt.top .tiptext::after {
+            margin-left: -5px;
+            top: 100%;
+            left: 3%;
+            border-color: black transparent transparent transparent;
+        }
+
+    /**Tooltip arriba izquierda*/
+    .toolt.topleft .tiptext {
+        bottom: 150%;
+        right: -5%;
+    }
+
+        .toolt.topleft .tiptext::after {
+            margin-left: -5px;
+            top: 100%;
+            right: 5px;
+            border-color: black transparent transparent transparent;
+        }
+
+
+    /**Tooltip abajo*/
+    .toolt.bottom .tiptext {
+        margin-left: -3px;
+        top: 150%;
+        left: 2%;
+    }
+
+        .toolt.bottom .tiptext::after {
+            margin-left: -5px;
+            bottom: 100%;
+            left: 10px;
+            border-color: transparent transparent black transparent;
+        }
+
+
+
+    /**Tooltip izquierda*/
+    .toolt.left .tiptext {
+        top: -10px;
+        right: 130%;
+    }
+
+        .toolt.left .tiptext::after {
+            margin-top: -2px;
+            top: 15px;
+            left: 100%;
+            border-color: transparent transparent transparent black;
+        }
+
+    /**Tooltip derecha*/
+    .toolt.right .tiptext {
+        top: -5px;
+        left: 110%;
+    }
+
+        .toolt.right .tiptext::after {
+            margin-top: -5px;
+            top: 50%;
+            right: 100%;
+            border-color: transparent black transparent transparent;
+        }
+
+.nav-link-tabs.active {
+    color: #020202 !important;
+    background-color: #e1dede !important;
+    font-weight: bold;
+}
+
+.nav-item > .nav-link-tabs.active {
+    border-style: solid;
+}
+
+table.dataTable th {
+    background-color: rgba(var(--bs-secondary-rgb),var(--bs-bg-opacity)) !important;
+}
+
+.label_text_area {
+    background-color: #293368;
+    min-width: 100%;
+    margin-bottom: 0;
+    color: white;
+}
+
+.label_input {
+    background-color: #293368;
+    margin-bottom: 0;
+    color: white;
+}
+
+label.error.fail-alert {
+    color: red;
+    /*border: 2px solid red;
+    border-radius: 4px;
+    line-height: 1;
+    padding: 2px 0 6px 6px;
+    background: #ffe6eb;*/
+}
+
+.nav-item-tabs {
+    background-color: #e1dede !important
+}
+
+.nav-link-tabs {
+    color: black !important;
+}
+.dt-button.margin{
+    margin-left:10px;
+}
+
+.left-col {
+    float: left;
+    width: 25%;
+}
+
+.center-col {
+    float: left;
+    width: 50%;
+}
+
+.right-col {
+    float: left;
+    width: 25%;
+}
